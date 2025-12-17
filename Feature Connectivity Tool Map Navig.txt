@@ -1,0 +1,188 @@
+Feature: Connectivity Tool Map Navigation
+
+  @filrermap
+  Scenario: Filter map functionality test
+    Given I am on the home page & I navigate to the connectivity tool map
+    When I apply filters on the map & select local authority view "Birmingham" & select Score by destination "Leisure" & Score by mode of transport "Cycling"
+    Then I should see expected results based on the applied filters
+
+  @connectivityscore
+  Scenario: Verify connectivity score on map view for local authority "Birmingham"
+    Given I am on the home page & I navigate to the connectivity tool map
+    When I select local authority view "Birmingham" & select tile on the map
+    Then I should see the connectivity score displayed correctly on the map
+
+    @localauthorityband
+  Scenario: Verify local authority band display on the map for local authority "Birmingham"
+    Given I am on the home page & I navigate to the connectivity tool map
+    When I select local authority view "Birmingham" & enable show authority band checkbox
+    Then I should see the authority bands displayed correctly on the map
+
+
+ConnectivityPage.ts
+
+import { Page, expect } from '@playwright/test';
+
+export class ConnectivityToolPage {
+    private showButton;
+    readonly localAuthorityViewCheckBox;
+    readonly scoreByDestinationDropDown;
+    readonly scoreByModeOfTransportDropDown;
+    readonly filterMapHeader;
+    readonly LocalAuthorityDropDown;
+    readonly showAuthorityBandcheckBox;
+    readonly zoomInButton;
+    readonly mapCanvas;
+    readonly connectivityScore;
+    readonly localAuthorityBand;
+
+
+    constructor(private page: Page) {
+        this.filterMapHeader = this.page.getByRole('heading', { name: 'Filter map' });
+        this.showButton = this.page.getByText('Show', { exact: true }).first();
+        this.localAuthorityViewCheckBox = this.page.getByRole('checkbox', { name: 'Local authority view' });
+        this.scoreByDestinationDropDown = this.page.getByLabel('Score by destination');
+        this.scoreByModeOfTransportDropDown = this.page.getByLabel('Score by mode of transport');
+        this.showAuthorityBandcheckBox = this.page.getByRole('checkbox', { name: 'Show authority band' });
+        this.LocalAuthorityDropDown = this.page.getByTestId('localAuthority');
+        this.zoomInButton = this.page.getByRole('button', { name: 'Zoom in' });
+        this.mapCanvas = this.page.getByTestId('map-canvas');
+        this.connectivityScore = this.page.locator('.score-box').first();
+        this.localAuthorityBand = this.page.locator('.score-box').last();
+    }
+
+    async verifyFilterMapHeader() {
+        await expect(this.filterMapHeader).toBeVisible();
+    }
+    async selectLocalAuthorityView() {
+        await this.localAuthorityViewCheckBox.check();
+    }
+    async selectScoreByDestination(destination: string) {
+        await this.scoreByDestinationDropDown.selectOption(destination);
+    }
+    async selectScoreByModeOfTransport(mode: string) {
+        await this.scoreByModeOfTransportDropDown.selectOption(mode);
+    }
+    async clickShowButton() {
+        await this.showButton.click();
+    }
+    async selectLocalAuthority(authority: string) {
+        await this.LocalAuthorityDropDown.selectOption(authority);
+    }
+
+    async selectShowAuthorityBand() {
+        await this.showAuthorityBandcheckBox.check();
+    }
+
+    async clickZoomInButton() {
+        await this.zoomInButton.click();
+    }
+
+    async clickMapAtPosition(x: number, y: number) {
+        await this.mapCanvas.click({
+            position: {
+                x: x,
+                y: y
+            }
+        });
+    }
+
+    async verifyConnectivityScore() {
+        await expect(this.connectivityScore).toBeVisible();
+        const scoreText = await this.connectivityScore.textContent();
+        console.log('Connectivity Score:', scoreText);
+        const isRedColor = Number(scoreText) >= 80 ? true : false;
+        expect(isRedColor).toBeTruthy();
+    }
+
+    async verifyLocalAuthorityBand() {
+        await expect(this.localAuthorityBand).toBeVisible();
+        const bandText = await this.localAuthorityBand.textContent();
+        console.log('Local Authority Band:', bandText);
+        // const isAorB = bandText?.match(\[A-C]) ? true : false;
+        const isAorB = /[ABC]/.test(bandText ?? '')
+        expect(isAorB).toBeTruthy();
+    }   
+
+}
+
+ConnectivityToolMap.ts
+
+
+import { createBdd } from 'playwright-bdd';
+import { test } from '../support/fixtures';
+import { expect } from '@playwright/test';
+
+const { Given, When, Then } = createBdd(test);
+
+Given('I am on the home page & I navigate to the connectivity tool map', async ({ homePage }) => {
+  await homePage.navigate();
+  await expect(homePage.pageTitle).toBeVisible();
+  await homePage.clickConnectivityToolLink();
+});
+
+When('I apply filters on the map & select local authority view {string} & select Score by destination {string} & Score by mode of transport {string}', async ({ connectivityToolPage }, destination: string, mode: string) => {
+  await connectivityToolPage.verifyFilterMapHeader();
+  await connectivityToolPage.clickShowButton();
+  await connectivityToolPage.selectLocalAuthorityView();
+  await connectivityToolPage.selectLocalAuthority("Birmingham");
+  await connectivityToolPage.selectShowAuthorityBand();
+  await connectivityToolPage.selectScoreByDestination("Leisure");
+  await connectivityToolPage.selectScoreByModeOfTransport("Cycling");
+});
+
+Then('I should see expected results based on the applied filters', async ({ connectivityToolPage, page }) => {
+  // Add assertions here to verify the expected results based on the applied filters
+  // This is a placeholder as the actual verification would depend on the application behavior
+  await expect(connectivityToolPage.localAuthorityViewCheckBox).toBeChecked();
+  await expect(connectivityToolPage.showAuthorityBandcheckBox).toBeChecked();
+  await expect(connectivityToolPage.LocalAuthorityDropDown).toContainText('Birmingham');
+  await expect(connectivityToolPage.scoreByDestinationDropDown).toContainText('Leisure');
+  await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText('Cycling');
+});
+
+When('I select local authority view {string} & select tile on the map', async ({ connectivityToolPage }, localAuthority: string) => {
+  await connectivityToolPage.verifyFilterMapHeader();
+  await connectivityToolPage.clickShowButton();
+  await connectivityToolPage.selectLocalAuthorityView();
+  await connectivityToolPage.selectLocalAuthority("Birmingham");
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickMapAtPosition(469, 133);
+});
+
+Then('I should see the connectivity score displayed correctly on the map', async ({ connectivityToolPage, page }) => {
+  // Add assertions here to verify the connectivity score displayed on the map
+  // This is a placeholder as the actual verification would depend on the application behavior
+  // Example: await expect(connectivityToolPage.connectivityScoreElement).toBeVisible();
+  await connectivityToolPage.verifyConnectivityScore();
+});
+
+When('I select local authority view {string} & enable show authority band checkbox', async ({ connectivityToolPage }, localAuthority: string) => {
+  await connectivityToolPage.verifyFilterMapHeader();
+  await connectivityToolPage.clickShowButton();
+  await connectivityToolPage.selectLocalAuthorityView();
+  await connectivityToolPage.selectLocalAuthority("Birmingham");
+  await connectivityToolPage.selectShowAuthorityBand();
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickZoomInButton();
+  await connectivityToolPage.clickMapAtPosition(469, 133);
+});
+
+Then('I should see the authority bands displayed correctly on the map', async ({ connectivityToolPage, page }) => {
+  // Add assertions here to verify the local authority band displayed on the map
+  // This is a placeholder as the actual verification would depend on the application behavior
+  // Example: await expect(connectivityToolPage.localAuthorityBandElement).toBeVisible();
+  await connectivityToolPage.verifyLocalAuthorityBand();
+});
+
+
+
+
+
+
+    
+   

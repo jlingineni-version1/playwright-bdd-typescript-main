@@ -1,0 +1,144 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Playwright-BDD Conventions, Best Practices, and TypeScript Concepts
+
+## File Structure
+- Feature files (.feature) are stored in `tests/e2e/features/`
+- Step definitions (.ts) are stored in `tests/e2e/steps/`
+- Page objects (.ts) are stored in `tests/e2e/pages/`
+- Fixtures and utility files are in `tests/e2e/fixtures/`
+
+## TypeScript Core Concepts for Beginners
+
+### Type Annotations
+- TypeScript adds static types to JavaScript
+- Basic syntax: `let variableName: type = value;`
+- Example: `let pageTitle: string = "Login Page";`
+
+### Interfaces
+- Define the shape of objects with property and method signatures
+- Used extensively for page objects and test data
+- Example:
+  ```typescript
+  interface LoginCredentials {
+    username: string;
+    password: string;
+  }
+  ```
+
+### Type vs Interface
+- Use interfaces for objects that can be extended
+- Use types for unions, intersections, or primitive type aliases
+- Example:
+  ```typescript
+  // Union type for possible test states
+  type TestStatus = "passed" | "failed" | "skipped";
+  ```
+
+### Generics
+- Allow creating reusable components with different types
+- Common in utility functions and page component wrappers
+- Example:
+  ```typescript
+  // A generic function to get text from any component
+  async function getTextFrom<T extends { text(): Promise<string> }>(element: T): Promise<string> {
+    return element.text();
+  }
+  ```
+
+## Feature Files
+- Each feature file should focus on a single feature
+- Scenarios should be independent and atomic
+- Use tags like `@smoke`, `@regression`, or `@critical` to categorize tests
+- Background steps should be used for common prerequisites
+
+## Step Definitions with TypeScript
+- Step definitions should use arrow functions with typed Playwright context:
+  ```typescript
+  // TypeScript arrow function with destructured, typed parameter
+  Given('I am on the login page', async ({ page }: { page: Page }) => {
+    await page.goto('/login');
+  });
+  ```
+
+- Use strong typing for parameters:
+  ```typescript
+  // String parameter with TypeScript type annotation
+  When('I enter {string} in the search box', async ({ page }, searchTerm: string) => {
+    await page.fill('#search', searchTerm);
+  });
+  ```
+
+- Type assertions for runtime value checking:
+  ```typescript
+  // Using "as" for type assertion when needed
+  const elementCount = await page.$$eval('.item', items => items.length) as number;
+  ```
+
+## Page Objects with TypeScript
+- Create strongly-typed classes:
+  ```typescript
+  // TypeScript class with visibility modifiers
+  export class LoginPage {
+    // Private fields with type annotations
+    private readonly emailInput: Locator;
+    private readonly passwordInput: Locator;
+    
+    // Constructor with parameter type
+    constructor(private readonly page: Page) {
+      this.emailInput = page.locator('#email');
+      this.passwordInput = page.locator('#password');
+    }
+    
+    // Method with return type
+    async login(email: string, password: string): Promise<void> {
+      await this.emailInput.fill(email);
+      await this.passwordInput.fill(password);
+    }
+  }
+  ```
+
+- Use access modifiers (public, private, protected) to control visibility
+- Use readonly for properties that shouldn't change
+
+## Async/Await in TypeScript
+- All Playwright operations are Promise-based and need async/await
+- TypeScript ensures proper handling of asynchronous code
+- Example:
+  ```typescript
+  // Async method with correct Promise<T> return type
+  async verifyElementText(selector: string, expectedText: string): Promise<boolean> {
+    const actualText = await this.page.textContent(selector);
+    return actualText === expectedText;
+  }
+  ```
+
+## Testing Patterns
+- For login functionality: `Given I am on the login page` → `When I enter credentials` → `Then I should be logged in`
+- For form submission: `Given I am on the form page` → `When I fill and submit the form` → `Then I should see success message`
+- For data verification: `Given I have created an entity` → `When I view the entity list` → `Then the entity should be visible`
+
+## TypeScript Type Guards in Testing
+- Use type guards to narrow types in conditional logic:
+  ```typescript
+  // Type guard function
+  function isErrorResponse(response: any): response is ErrorResponse {
+    return response && response.error !== undefined;
+  }
+  
+  // Using the type guard
+  if (isErrorResponse(result)) {
+    // TypeScript knows result is ErrorResponse here
+    console.error(result.error.message);
+  }
+  ```
+
+## TypeScript Configuration for Playwright
+- tsconfig.json should include:
+  - "strict": true for maximum type-checking
+  - "esModuleInterop": true for compatibility
+  - "target": "ES2019" or higher for modern JavaScript features
