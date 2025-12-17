@@ -26,8 +26,7 @@ export class CurrentSelectionPage {
         const actualLongitudeText = await this.longitude.textContent();
         console.log('Longitude:', actualLongitudeText);
         const expectedLocationText = `${expectedLocation}Greater London`;
-
-        //  const actualSquareID = Number(await this.squreID.textContent())?.trim();
+        
         const actualLatitude = Number((await this.latitude.textContent())?.trim());
         const actualLongitude = Number((await this.longitude.textContent())?.trim())
         expect(actualsquareID).toBe(expectedSquareID);

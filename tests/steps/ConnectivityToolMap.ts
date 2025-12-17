@@ -1,6 +1,7 @@
 import { createBdd } from 'playwright-bdd';
 import { test } from '../support/fixtures';
 import { expect } from '@playwright/test';
+import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
 
 const { Given, When, Then } = createBdd(test);
 
@@ -150,9 +151,11 @@ Then('I should see the map updated with the selected filtering options {string},
   //ToDo add to UTIL Functionality for snapshot comparison
   // await connectivityToolPage.verifyVisualRegessionOfMap('connectivity-tool-map-authority.png');
   const screenshot = await connectivityToolPage.takeScreenshot();
-  expect(screenshot).toMatchSnapshot(authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png', {
-    maxDiffPixelRatio: 0.2,   // 20% tolerance
-    maxDiffPixels: 200000,    // absolute pixel count tolerance
+  await VisualSnapshotHelper.compareScreenshot(screenshot,authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png');
+    /* expect(screenshot).toMatchSnapshot(authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png', {
+     maxDiffPixelRatio: 0.2,   // 20% tolerance
+     maxDiffPixels: 200000,    // absolute pixel count tolerance */
+
   });
 
   // Then('current selection should display expected results', async ({ currentSelectionPage }) => {
@@ -161,6 +164,6 @@ Then('I should see the map updated with the selected filtering options {string},
   //   await currentSelectionPage.verifyCurrentSelection();
   // });
 
-});
+
 
 
