@@ -11,11 +11,13 @@
     "bdd:show-report": "npx playwright show-report",
     "bdd:test:home": "npm run bdd:generate && npx playwright test .features-gen --grep @home",
     "bdd:test:smoke": "npm run bdd:generate && npx playwright test .features-gen --grep @smoke",
+    "bdd:test:dev": "ENV=dev npm run bdd:test",
+    "bdd:test:test": "ENV=test npm run bdd:test",
+    "bdd:test:prod": "ENV=prod npm run bdd:test",
     "test": "npm run bdd:test",
     "test:ui": "npm run bdd:test:ui",
     "show-trace": "npx playwright show-trace"
   },
-  
   "author": "",
   "license": "ISC",
   "description": "",

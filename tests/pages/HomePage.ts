@@ -1,4 +1,5 @@
 import { Page, expect } from '@playwright/test';
+import{BASE_URL} from '../config/env';
 
 export class HomePage {
     private exploreConnectivityToolLink;
@@ -31,9 +32,9 @@ export class HomePage {
         this.feedbackLink = this.page.getByRole('link', { name: 'give your feedback (opens in' });
     }
 
-
     async navigate() {
-        await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/index');
+        // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/index');
+        await this.page.goto(BASE_URL);
     }
 
     async navigateToConnectivityToolMap() {
