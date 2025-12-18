@@ -113,8 +113,8 @@ This project is open source and available under the [MIT License](LICENSE) (add 
 
 ## 🙋‍♂️ Author
 
-**Arun Purohit**  
-_Quality Engineering Enthusiast | Automation Specialist_
+**Jyothi Lingineni**  
+_Senior Automation Test Engineer_
 
 ---
 
@@ -147,7 +147,11 @@ npm install
 ```
 
 ```shellscript
-  npm run test:painter
+  npm run bdd:test:home
+```
+
+```shellscript
+  npm run bdd:test:smoke
 ```
 
 ```shellscript

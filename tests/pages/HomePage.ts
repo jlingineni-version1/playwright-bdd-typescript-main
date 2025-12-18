@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-import{BASE_URL} from '../config/env';
+import { BASE_URL, MAP_URL, Accesibility_URL, Private_Policy_URL, Guidance_URL, Understand_Data_URL } from '../config/env';
 
 export class HomePage {
     private exploreConnectivityToolLink;
@@ -38,9 +38,9 @@ export class HomePage {
     }
 
     async navigateToConnectivityToolMap() {
-        await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/app#14/52.879/-0.47');
+        // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/app#14/52.879/-0.47');
+        await this.page.goto(MAP_URL);
     }
-
 
     async clickConnectivityToolLink() {
         await this.exploreConnectivityToolLink.click();
@@ -67,7 +67,8 @@ export class HomePage {
     }
 
     async verifyAccessibilityPageURL() {
-        await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/accessibility-statement');
+        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/accessibility-statement');
+        await expect(this.page).toHaveURL(Accesibility_URL);
     }
 
     async verifyPrivacyPolicyPage() {
@@ -75,7 +76,8 @@ export class HomePage {
     }
 
     async verifyPrivacyPolicyPageURL() {
-        await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/privacy-policy');
+        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/privacy-policy');
+        await expect(this.page).toHaveURL(Private_Policy_URL);
     }
     async clickGuidanceLink() {
         await this.guidanceLink.click();
@@ -90,7 +92,8 @@ export class HomePage {
     }
 
     async verifyGuidancePageURL() {
-        await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/guidance');
+        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/guidance');
+        await expect(this.page).toHaveURL(Guidance_URL);
     }
     async clickUnderstandDataLink() {
         await this.understandDataLink.click();
@@ -101,7 +104,8 @@ export class HomePage {
     }
 
     async verifyUnderstandDataPageURL() {
-        await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/understand-the-data');
+        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/understand-the-data');
+        await expect(this.page).toHaveURL(Understand_Data_URL);
     }
 
     async clickFeedbackLink(): Promise<Page> {

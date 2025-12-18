@@ -3,6 +3,7 @@ import { test } from '../support/fixtures';
 import { expect } from '@playwright/test';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { BrowserContext } from 'playwright';
+import { APP_URL } from '../config/env';
 
 const { Given, When, Then } = createBdd(test);
 let context: BrowserContext;
@@ -22,7 +23,8 @@ When('I click the explore connectivity tool link', async ({ homePage }) => {
 });
 
 Then('I should navigate to map successfully', async ({ page }) => {
-  await expect(page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/app');
+  // await expect(page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/app');
+  await expect(page).toHaveURL(APP_URL);
 });
 
 When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage }) => {
