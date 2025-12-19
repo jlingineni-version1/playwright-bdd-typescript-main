@@ -54,3 +54,8 @@ Given I am on the home page & I navigate to the connectivity tool map
       | Hounslow West, London Borough of Hounslow        | 86            |476 | 275  |
       | Leeds, England, United Kingdom                   | 87            |301 | 278  |
 
+ @MapTiler
+  Scenario: Verify Map Tiler is redicrected to expected screen and navigate back to connectivity tool map page
+    When I click on Map Tiler link on the connectivity tool map page
+    Then I should be redirected to Map Tiler screen and navigate back to connectivity tool map page
+

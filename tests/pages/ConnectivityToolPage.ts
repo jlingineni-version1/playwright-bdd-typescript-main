@@ -13,6 +13,7 @@ export class ConnectivityToolPage {
     readonly connectivityScore;
     readonly localAuthorityBand;
     readonly searchComboBox;
+    readonly mapTilerLink;
 
     constructor(private page: Page) {
         this.filterMapHeader = this.page.getByRole('heading', { name: 'Filter map' });
@@ -26,7 +27,8 @@ export class ConnectivityToolPage {
         this.mapCanvas = this.page.getByTestId('map-canvas');
         this.connectivityScore = this.page.locator('.score-box').first();
         this.localAuthorityBand = this.page.locator('.score-box').last();
-        this.searchComboBox = this.page.getByRole('combobox', { name: 'Search by coordinates, street' })
+        this.searchComboBox = this.page.getByRole('combobox', { name: 'Search by coordinates, street' });
+        this.mapTilerLink = this.page.getByRole('link', { name: 'MapTiler' });
     }
 
     async verifyFilterMapHeader() {
@@ -141,6 +143,25 @@ export class ConnectivityToolPage {
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(8000);
     }
+
+    async clickMapTilerLink() {
+       
+        const[popup] = await Promise.all([
+            this.page.waitForEvent('popup'),
+            this.mapTilerLink.click(), // Opens a new tab
+        ]);
+        await popup.waitForLoadState();
+    }
+
+    /*async clickMapTilerLink(): Promise<Page> {
+        const [newPage] = await Promise.all([
+            this.page.context().waitForEvent('page'),
+            this.mapTilerLink.click(), // Opens a new tab
+        ]);
+        await newPage.waitForLoadState();
+        return newPage;
+    } */
+
 
     /*async searchLocation(location: string) {
         const searchInput = this.page.locator('#app-site-search__input');

@@ -2,6 +2,8 @@ import { createBdd } from 'playwright-bdd';
 import { test } from '../support/fixtures';
 import { expect } from '@playwright/test';
 import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
+import { FeedbackPage } from '../pages/FeedbackPage';
+import { MapTilePage } from '../pages/MapTilerPage';
 
 const { Given, When, Then } = createBdd(test);
 
@@ -140,6 +142,23 @@ Then('I should see the map updated with the selected filtering options {string},
      maxDiffPixelRatio: 0.2,   // 20% tolerance
      maxDiffPixels: 200000,    // absolute pixel count tolerance */
   });
+
+When('I click on Map Tiler link on the connectivity tool map page', async ({ connectivityToolPage}) => {
+  await connectivityToolPage.clickMapTilerLink();
+  
+});
+
+Then('I should be redirected to Map Tiler screen and navigate back to connectivity tool map page', async ({ connectivityToolPage, mapTilePage, page }) => {
+  mapTilePage = new MapTilePage(page);
+  await mapTilePage.verifyMapTilerHeading();
+  await mapTilePage.closeTab();
+  await page.bringToFront();
+  await connectivityToolPage.verifyFilterMapHeader();
+});
+
+
+
+
 
 
 

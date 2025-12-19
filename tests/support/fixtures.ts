@@ -3,12 +3,14 @@ import { HomePage } from '../pages/HomePage';
 import { ConnectivityToolPage } from '../pages/ConnectivityToolPage';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { CurrentSelectionPage } from '../pages/CurrentSelectionPage';
+import {MapTilePage} from '../pages/MapTilerPage';
 
 type Fixtures = {
   homePage: HomePage;
   connectivityToolPage: ConnectivityToolPage;
   feedbackPage: FeedbackPage;
   currentSelectionPage: CurrentSelectionPage;
+  mapTilePage: MapTilePage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -30,6 +32,11 @@ export const test = base.extend<Fixtures>({
   currentSelectionPage: async ({ page }, use) => {
     const currentSelectionPage = new CurrentSelectionPage(page);
     await use(currentSelectionPage);
+  },
+
+  mapTilePage: async ({ page }, use) => {
+    const mapTilePage = new MapTilePage(page);
+    await use(mapTilePage);
   },
 
 });
