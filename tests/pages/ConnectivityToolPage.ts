@@ -36,7 +36,8 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToLoad() {
-        await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
+        // await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
+        await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
     }
 
     async selectLocalAuthorityView() {
