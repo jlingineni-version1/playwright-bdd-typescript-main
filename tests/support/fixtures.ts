@@ -4,6 +4,7 @@ import { ConnectivityToolPage } from '../pages/ConnectivityToolPage';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { CurrentSelectionPage } from '../pages/CurrentSelectionPage';
 import {MapTilePage} from '../pages/MapTilerPage';
+import {OpenStreetMapPage} from '../pages/OpenStreetMapPage';     
 
 type Fixtures = {
   homePage: HomePage;
@@ -11,6 +12,7 @@ type Fixtures = {
   feedbackPage: FeedbackPage;
   currentSelectionPage: CurrentSelectionPage;
   mapTilePage: MapTilePage;
+  openStreetMapPage: OpenStreetMapPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -37,6 +39,10 @@ export const test = base.extend<Fixtures>({
   mapTilePage: async ({ page }, use) => {
     const mapTilePage = new MapTilePage(page);
     await use(mapTilePage);
+  },
+  openStreetMapPage: async ({ page }, use) => {
+    const openStreetMapPage = new OpenStreetMapPage(page);
+    await use(openStreetMapPage);
   },
 
 });

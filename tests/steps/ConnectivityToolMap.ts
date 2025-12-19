@@ -4,6 +4,7 @@ import { expect } from '@playwright/test';
 import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { MapTilePage } from '../pages/MapTilerPage';
+import { OpenStreetMapPage } from '../pages/OpenStreetMapPage';
 
 const { Given, When, Then } = createBdd(test);
 
@@ -155,6 +156,18 @@ Then('I should be redirected to Map Tiler screen and navigate back to connectivi
   await page.bringToFront();
   await connectivityToolPage.verifyFilterMapHeader();
 });
+
+When('I click on Open Street Map Contributors link on the connectivity tool map page', async ({ connectivityToolPage}) => {
+  await connectivityToolPage.clickOpenStreetMapLink();
+});
+
+Then('I should be redirected to Open Street Map Contributors screen and navigate back to connectivity tool map page', async ({ connectivityToolPage, openStreetMapPage,page }) => {
+    openStreetMapPage = new OpenStreetMapPage(page);
+    await openStreetMapPage.verifyOpenStreetMapHeading();
+    await openStreetMapPage.closeTab();
+    await page.bringToFront();
+    await connectivityToolPage.verifyFilterMapHeader(); 
+    });
 
 
 

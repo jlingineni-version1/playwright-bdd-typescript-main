@@ -14,6 +14,7 @@ export class ConnectivityToolPage {
     readonly localAuthorityBand;
     readonly searchComboBox;
     readonly mapTilerLink;
+    readonly openStreetMapLink;
 
     constructor(private page: Page) {
         this.filterMapHeader = this.page.getByRole('heading', { name: 'Filter map' });
@@ -29,6 +30,7 @@ export class ConnectivityToolPage {
         this.localAuthorityBand = this.page.locator('.score-box').last();
         this.searchComboBox = this.page.getByRole('combobox', { name: 'Search by coordinates, street' });
         this.mapTilerLink = this.page.getByRole('link', { name: 'MapTiler' });
+        this.openStreetMapLink = this.page.getByRole('link', { name: 'OpenStreetMap contributors' });
     }
 
     async verifyFilterMapHeader() {
@@ -152,6 +154,14 @@ export class ConnectivityToolPage {
         ]);
         await popup.waitForLoadState();
     }
+
+        async clickOpenStreetMapLink() {
+            const[popup] = await Promise.all([
+                this.page.waitForEvent('popup'),
+                this.openStreetMapLink.click(), // Opens a new tab
+            ]);
+            await popup.waitForLoadState();
+        }
 
     /*async clickMapTilerLink(): Promise<Page> {
         const [newPage] = await Promise.all([

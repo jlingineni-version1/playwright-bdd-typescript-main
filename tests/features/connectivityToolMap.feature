@@ -59,3 +59,9 @@ Given I am on the home page & I navigate to the connectivity tool map
     When I click on Map Tiler link on the connectivity tool map page
     Then I should be redirected to Map Tiler screen and navigate back to connectivity tool map page
 
+    @openStreetMapContributors
+  Scenario: Verify Open Street Map Contributors link is redirected to expected screen and navigate back to connectivity tool map page
+    When I click on Open Street Map Contributors link on the connectivity tool map page
+    Then I should be redirected to Open Street Map Contributors screen and navigate back to connectivity tool map page
+
+
