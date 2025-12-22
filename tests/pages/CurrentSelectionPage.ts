@@ -6,6 +6,8 @@ export class CurrentSelectionPage {
     readonly localAuthorities;
     readonly latitude;
     readonly longitude;
+    readonly cancelLocationSelectionLink;
+    readonly warningMessage;
 
     constructor(private page: Page) {
         this.currentSelectionTilte = this.page.getByRole('heading', { name: 'Current selection' });
@@ -13,6 +15,8 @@ export class CurrentSelectionPage {
         this.localAuthorities = this.page.locator('.govuk-summary-list__value').nth(1);
         this.latitude = this.page.locator('.govuk-summary-list__value').nth(2);
         this.longitude = this.page.locator('.govuk-summary-list__value').nth(3);
+        this.cancelLocationSelectionLink = this.page.getByRole('link', { name: 'Cancel location selection' });
+        this.warningMessage = this.page.getByText('Warning Click on the map to');
     }
 
     async verifyCurrentSelection(expectedCs_latitude: number, expectedCs_longitude: number, expectedLocation: string, expectedSquareID: string) {
@@ -26,12 +30,20 @@ export class CurrentSelectionPage {
         const actualLongitudeText = await this.longitude.textContent();
         console.log('Longitude:', actualLongitudeText);
         const expectedLocationText = `${expectedLocation}Greater London`;
-        
+
         const actualLatitude = Number((await this.latitude.textContent())?.trim());
         const actualLongitude = Number((await this.longitude.textContent())?.trim())
         expect(actualsquareID).toBe(expectedSquareID);
         expect(actualLocation).toContain(expectedLocation);
         expect(actualLatitude).toBeCloseTo(expectedCs_latitude);
         expect(actualLongitude).toBeCloseTo(expectedCs_longitude);
+    }
+
+    async cancelLocationSelection() {
+        await this.cancelLocationSelectionLink.click();
+    }
+
+    async verifyWarningMessage() {
+        await expect(this.warningMessage).toBeVisible();
     }
 }
