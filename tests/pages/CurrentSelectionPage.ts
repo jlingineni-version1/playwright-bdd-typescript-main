@@ -8,6 +8,7 @@ export class CurrentSelectionPage {
     readonly longitude;
     readonly cancelLocationSelectionLink;
     readonly warningMessage;
+    readonly exploreTheScoreLink;
 
     constructor(private page: Page) {
         this.currentSelectionTilte = this.page.getByRole('heading', { name: 'Current selection' });
@@ -17,6 +18,7 @@ export class CurrentSelectionPage {
         this.longitude = this.page.locator('.govuk-summary-list__value').nth(3);
         this.cancelLocationSelectionLink = this.page.getByRole('link', { name: 'Cancel location selection' });
         this.warningMessage = this.page.getByText('Warning Click on the map to');
+        this.exploreTheScoreLink = this.page.getByRole('link', { name: 'Explore the score' });
     }
 
     async verifyCurrentSelection(expectedCs_latitude: number, expectedCs_longitude: number, expectedLocation: string, expectedSquareID: string) {
@@ -46,4 +48,8 @@ export class CurrentSelectionPage {
     async verifyWarningMessage() {
         await expect(this.warningMessage).toBeVisible();
     }
+    async exploreTheScore() {
+        await this.exploreTheScoreLink.click();
+    }
+
 }
