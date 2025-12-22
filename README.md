@@ -21,6 +21,7 @@ Implements modern best practices for maintainable, high-performance web applicat
 ```
 tests/
   features/        # .feature files (Gherkin syntax)
+  helpers/         # Utility & helper functions
   steps/           # Step definitions (TypeScript)
   pages/           # Page objects (TypeScript)
   support/         # Fixtures, hooks, helpers
@@ -47,22 +48,31 @@ npm install
 
 - **Run all BDD tests:**  
   ```bash
-  npm run test:bdd
+  npm run bdd:test
   ```
-- **Run Playwright UI mode:**  
+- **Run Playwright tests in headed UI mode:**  
   ```bash
-  npm run test headed
+  npm run bdd:test:headed
   ```
 - **Run a specific feature:**  
   ```bash
-  npm run test home
+  npm run bdd:test:home
   ```
+
+- **Run Tests in Playwright UI Mode:**  
+```bash
+npm run bdd:test:ui
+```
+
+- **Run tagged tests (example: smoke):**  
+```bash
+npm run bdd:test:smoke
+```
 
 ### 3. View Reports
 
 - **Playwright HTML report:**  
   ```bash
-  npm run playwright-test
   npm run bdd:show-report
   ```
 
@@ -70,13 +80,15 @@ npm install
 
 ## 🧩 Scripts
 
-| Script                | Description                                 |
-|-----------------------|---------------------------------------------|
-| `test:bdd`            | Run Cucumber BDD tests                      |
-| `test:headed`         | Run Playwright tests in headed mode (UI)    |
-| `test:painter`        | Run specific feature file                   |
-| `playwright-test`     | Run Playwright with HTML & list reporters   |
-| `bdd:show-report`     | Show Playwright HTML report                 |
+| Script                    | Description                                 |
+|-------------------------- |---------------------------------------------|
+| `bdd:tst`                 | Run Cucumber BDD tests                      |
+| `bdd:test:headed`         | Run Playwright tests in headed mode (UI)    |
+| `bdd:test:home`           | Run specific feature file                   |
+| `bdd:test:smoke`          | Run tests with @smoke tag                   |
+| `bdd:test:ui  `           | Run tests in Playwright UI Mode             |
+| `playwright-test`         | Run Playwright with HTML & list reporters   |
+| `bdd:show-report`         | Show Playwright HTML report                 |
 
 ---
 
@@ -119,42 +131,3 @@ _Senior Automation Test Engineer_
 ---
 
 Let me know if you want to add badges, CI instructions, or tailor it for a specific company or use case!
-
-```plaintext
-tests/
-  e2e/
-    features/      # .feature files (Gherkin syntax)
-    steps/         # Step definitions (TypeScript)
-    pages/         # Page objects (TypeScript)
-    support/       # Fixtures, hooks, helpers
-  test.spec.ts     # Example Playwright test
-playwright.config.ts
-cucumber.js
-tsconfig.json
-.gitignore
-```
-
-```shellscript
-npm install
-```
-
-```shellscript
-  npm run test:bdd
-```
-
-```shellscript
-  npm run test:headed
-```
-
-```shellscript
-  npm run bdd:test:home
-```
-
-```shellscript
-  npm run bdd:test:smoke
-```
-
-```shellscript
-  npm run playwright-test
-  npm run bdd:show-report
-```
