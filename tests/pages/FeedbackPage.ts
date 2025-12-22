@@ -52,7 +52,7 @@ export class FeedbackPage {
         await this.feedbackImprovementTextbox.fill('No suggestions');
         await this.feedbackContactTextbox.fill('Test contact');
         await this.feedbackFinishButton.click();
-        await this.feedbackCompletionHeading.click();
+        await expect(this.feedbackCompletionHeading).toBeVisible();
         await this.page.bringToFront();
     }
 
@@ -61,37 +61,37 @@ export class FeedbackPage {
     }
 
 
-    async verifyFeedbackFormPage() {
+   /* async verifyFeedbackFormPage() {
         await expect(this.feedbackFormHeading).toBeVisible();
-    }
+    }*/
 
-    async selectFeedbackCategory() {
+   /* async selectFeedbackCategory() {
         await this.feedbackCategoryRadioButton.click();
-    }
+    } */
 
-    async enterTaskDescription(description: string) {
+   /* async enterTaskDescription(description: string) {
         await this.feedbacktaskDescriptionTextbox.fill(description);
-    }
+    } */
 
-    async selectSatisfaction() {
+    /*async selectSatisfaction() {
         await this.feedbackSatisfactionRadioButton.check();
-    }
+    }*/
 
-    async enterImprovementSuggestions(suggestions: string) {
+   /* async enterImprovementSuggestions(suggestions: string) {
         await this.feedbackImprovementTextbox.fill(suggestions);
-    }
+    }*/
 
-    async enterContactDetails(details: string) {
+   /* async enterContactDetails(details: string) {
         await this.feedbackContactTextbox.fill(details);
-    }
+    }*/
 
-    async clickFinishSurveyButton() {
+    /*async clickFinishSurveyButton() {
         await this.feedbackFinishButton.click();
 
     }
 
     async verifyFeedbackCompletionPage() {
         await expect(this.feedbackCompletionHeading).toBeVisible();
-    }
+    }*/
 
 }

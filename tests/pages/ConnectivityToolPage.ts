@@ -1,4 +1,5 @@
 import { Page, expect } from '@playwright/test';
+import { PopupHelper } from '../helpers/popUpHelper';
 
 export class ConnectivityToolPage {
     private showButton;
@@ -146,32 +147,20 @@ export class ConnectivityToolPage {
         await this.page.waitForTimeout(8000);
     }
 
-    async clickMapTilerLink() {
-       
-        const[popup] = await Promise.all([
-            this.page.waitForEvent('popup'),
-            this.mapTilerLink.click(), // Opens a new tab
-        ]);
-        await popup.waitForLoadState();
+
+    async clickMapTilerLink(): Promise<Page> {
+        return await PopupHelper.clickAndWaitForPopup(
+            this.page,
+            this.mapTilerLink
+        );
     }
 
-        async clickOpenStreetMapLink() {
-            const[popup] = await Promise.all([
-                this.page.waitForEvent('popup'),
-                this.openStreetMapLink.click(), // Opens a new tab
-            ]);
-            await popup.waitForLoadState();
-        }
-
-    /*async clickMapTilerLink(): Promise<Page> {
-        const [newPage] = await Promise.all([
-            this.page.context().waitForEvent('page'),
-            this.mapTilerLink.click(), // Opens a new tab
-        ]);
-        await newPage.waitForLoadState();
-        return newPage;
-    } */
-
+    async clickOpenStreetMapLink(): Promise<Page> {
+        return await PopupHelper.clickAndWaitForPopup(
+            this.page,
+            this.openStreetMapLink
+        );
+    }
 
     /*async searchLocation(location: string) {
         const searchInput = this.page.locator('#app-site-search__input');
@@ -180,13 +169,4 @@ export class ConnectivityToolPage {
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(1500);
     }*/
-
-    //     test.fail("Visual regression test - Services page", async ({ page }) => {
-    //   await page.setViewportSize({ width: 1920, height: 1080 });
-    //   const servicesPage = new ServicesPage(page);
-    //   await servicesPage.navigateDirectlyToServicesUrl();
-    //   expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
-    //     "full-page-screenshot.png"
-    //   );
-
 }

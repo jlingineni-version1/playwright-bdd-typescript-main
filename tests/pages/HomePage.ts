@@ -1,5 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { BASE_URL, MAP_URL, Accesibility_URL, Private_Policy_URL, Guidance_URL, Understand_Data_URL } from '../config/env';
+import { PopupHelper } from '../helpers/popUpHelper';
 
 export class HomePage {
     private exploreConnectivityToolLink;
@@ -109,11 +110,10 @@ export class HomePage {
     }
 
     async clickFeedbackLink(): Promise<Page> {
-        const [newPage] = await Promise.all([
-            this.page.context().waitForEvent("page"),
-            this.feedbackLink.click(), // adjust selector 
-        ]);
-        await newPage.waitForLoadState();
-        return newPage;
-    }
+    return await PopupHelper.clickAndWaitForPopup(
+      this.page,
+      this.feedbackLink
+    );
 }
+}
+
