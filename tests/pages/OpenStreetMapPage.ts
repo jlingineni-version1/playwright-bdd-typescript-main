@@ -43,5 +43,5 @@ export class OpenStreetMapPage {
             await popup.close();
         }
     }
-  
+
 }

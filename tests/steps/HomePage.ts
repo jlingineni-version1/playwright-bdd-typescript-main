@@ -12,6 +12,7 @@ let feedbackPage: FeedbackPage;
 Given('I am on the home page', async ({ homePage }) => {
   await homePage.navigate();
   await expect(homePage.pageTitle).toBeVisible();
+  await homePage.titlesVisible();
 });
 
 Given('I navigate to the connectivity tool map', async ({ homePage }) => {

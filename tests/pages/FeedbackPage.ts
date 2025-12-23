@@ -1,4 +1,6 @@
 import { Page, expect } from '@playwright/test';
+import { BASE_URL, MAP_URL } from '../config/env';
+import { PopupHelper } from '../helpers/popUpHelper';
 
 export class FeedbackPage {
 
@@ -28,11 +30,13 @@ export class FeedbackPage {
 
 
     async navigate() {
-        await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/index');
+        // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/index');
+        await this.page.goto(BASE_URL);
     }
 
     async navigateToConnectivityToolMap() {
-        await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/app#14/52.879/-0.47');
+        // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/app#14/52.879/-0.47');
+        await this.page.goto(MAP_URL);
     }
 
     async clickBackLink() {
@@ -59,39 +63,4 @@ export class FeedbackPage {
     async closeTab() {
         await this.page.close();
     }
-
-
-   /* async verifyFeedbackFormPage() {
-        await expect(this.feedbackFormHeading).toBeVisible();
-    }*/
-
-   /* async selectFeedbackCategory() {
-        await this.feedbackCategoryRadioButton.click();
-    } */
-
-   /* async enterTaskDescription(description: string) {
-        await this.feedbacktaskDescriptionTextbox.fill(description);
-    } */
-
-    /*async selectSatisfaction() {
-        await this.feedbackSatisfactionRadioButton.check();
-    }*/
-
-   /* async enterImprovementSuggestions(suggestions: string) {
-        await this.feedbackImprovementTextbox.fill(suggestions);
-    }*/
-
-   /* async enterContactDetails(details: string) {
-        await this.feedbackContactTextbox.fill(details);
-    }*/
-
-    /*async clickFinishSurveyButton() {
-        await this.feedbackFinishButton.click();
-
-    }
-
-    async verifyFeedbackCompletionPage() {
-        await expect(this.feedbackCompletionHeading).toBeVisible();
-    }*/
-
 }

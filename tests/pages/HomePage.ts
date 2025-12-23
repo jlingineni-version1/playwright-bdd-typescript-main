@@ -16,6 +16,12 @@ export class HomePage {
     readonly understandDataHeading;
     readonly feedbackLink;
     readonly backLink;
+    readonly connectivityToolLiteTitle;
+    readonly departmentForTransportTitle;
+    readonly ministryOfHousingTitle;
+    readonly activeTravelEnglandTitle;
+    readonly exploreTheMapTitle;
+
 
     constructor(private page: Page) {
         this.pageTitle = this.page.getByRole('heading', { name: 'Discover connectivity in your local area' });
@@ -31,6 +37,21 @@ export class HomePage {
         this.understandDataLink = this.page.getByRole('link', { name: 'Understand the data' });
         this.understandDataHeading = this.page.getByRole('heading', { name: 'Understand The Data' });
         this.feedbackLink = this.page.getByRole('link', { name: 'give your feedback (opens in' });
+        this.connectivityToolLiteTitle = page.getByRole('heading', { name: 'Connectivity Tool Lite' });
+        this.departmentForTransportTitle = page.getByRole('img', { name: 'Logo for Department for' });
+        this.ministryOfHousingTitle = page.getByRole('img', { name: 'Logo for Ministry of Housing' });
+        this.activeTravelEnglandTitle = page.getByRole('img', { name: 'Logo for Active Travel England' });
+        this.exploreTheMapTitle = page.getByRole('heading', { name: 'Explore the map' });
+
+    }
+
+    async titlesVisible() {
+        await expect(this.connectivityToolLiteTitle).toBeVisible();
+        await expect(this.exploreTheMapTitle).toBeVisible();
+        await expect(this.activeTravelEnglandTitle).toBeVisible();
+        await expect(this.ministryOfHousingTitle).toBeVisible();
+        await expect(this.departmentForTransportTitle).toBeVisible();
+
     }
 
     async navigate() {
@@ -110,10 +131,10 @@ export class HomePage {
     }
 
     async clickFeedbackLink(): Promise<Page> {
-    return await PopupHelper.clickAndWaitForPopup(
-      this.page,
-      this.feedbackLink
-    );
-}
+        return await PopupHelper.clickAndWaitForPopup(
+            this.page,
+            this.feedbackLink
+        );
+    }
 }
 
