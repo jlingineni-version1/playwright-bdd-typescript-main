@@ -21,6 +21,7 @@ export class HomePage {
     readonly ministryOfHousingTitle;
     readonly activeTravelEnglandTitle;
     readonly exploreTheMapTitle;
+    readonly guidanceHeaderLink;
 
 
     constructor(private page: Page) {
@@ -42,6 +43,7 @@ export class HomePage {
         this.ministryOfHousingTitle = page.getByRole('img', { name: 'Logo for Ministry of Housing' });
         this.activeTravelEnglandTitle = page.getByRole('img', { name: 'Logo for Active Travel England' });
         this.exploreTheMapTitle = page.getByRole('heading', { name: 'Explore the map' });
+        this.guidanceHeaderLink = page.getByRole('navigation').getByRole('link', { name: 'Guidance' });
 
     }
 
@@ -53,6 +55,11 @@ export class HomePage {
         await expect(this.departmentForTransportTitle).toBeVisible();
 
     }
+
+    async clickOnNavGuidanceLink() {
+        await this.guidanceHeaderLink.click();
+    }
+
 
     async navigate() {
         // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/index');

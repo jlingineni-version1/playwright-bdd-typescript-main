@@ -49,6 +49,14 @@ Then('navigate back to home page from privacy policy', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });
 
+When('I click on nav header guidance link and validate the guidance page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickOnNavGuidanceLink();
+   await homePage.verifyGuidancePage();
+  await homePage.clickGuidanceClickableLink();
+  await homePage.verifyGuidancePageURL();
+  await homePage.clickBackLink();
+});
+
 When('I click on guidance link and validate the guidance page is displayed successfully', async ({ homePage }) => {
   await homePage.clickGuidanceLink();
   await homePage.verifyGuidancePage();

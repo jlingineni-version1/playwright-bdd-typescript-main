@@ -23,6 +23,14 @@ Feature: Home Page Login Functionality
     When I click on guidance link and validate the guidance page is displayed successfully
     Then navigate back to home page
 
+  @guidance_headerLink @regression
+  Scenario:Home page nav header guidance link check
+    Given I am on the home page
+    When I click on nav header guidance link and validate the guidance page is displayed successfully
+    Then navigate back to home page
+
+
+
   @understandData_footerLink @footer @regression
   Scenario:Home page understand the data link check
     Given I am on the home page
