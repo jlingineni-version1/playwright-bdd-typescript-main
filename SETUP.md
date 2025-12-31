@@ -107,6 +107,7 @@ npx playwright show-trace test-results/[test-folder]/trace.zip
 playwright-bdd-typescript-main/
 ├── tests/
 │   ├── features/          # BDD feature files (.feature)
+|   |── helpers/           # Utility & helper functions
 │   ├── steps/             # Step definitions
 │   ├── pages/             # Page objects
 │   ├── support/hooks/     # Test hooks (setup/teardown)
