@@ -1,6 +1,5 @@
 import { Page, expect } from '@playwright/test';
 import { BASE_URL, MAP_URL } from '../config/env';
-import { PopupHelper } from '../helpers/popUpHelper';
 
 export class FeedbackPage {
 

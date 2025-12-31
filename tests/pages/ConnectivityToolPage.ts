@@ -43,7 +43,35 @@ export class ConnectivityToolPage {
     async waitForMapToLoad() {
         // await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
+        await this.page.waitForLoadState('networkidle');
+        // this.waitForMapLibreDomFallback();
+        await this.page.waitForFunction(() => {
+            const canvas = document.querySelector('canvas');
+            return canvas && canvas.width > 0 && canvas.height > 0;
+        });
     }
+
+    /* private async waitForMapLibreDomFallback(maxRetries = 3): Promise<void> {
+         for (let i = 1; i <= maxRetries; i++) {
+             try {
+                 await this.page.waitForSelector('.maplibregl-canvas', { timeout: 5000 });
+ 
+                 await this.page.waitForFunction(() => {
+                     const canvas = document.querySelector('.maplibregl-canvas') as any;
+                     return canvas && canvas.width > 0 && canvas.height > 0;
+                 }, { timeout: 5000 });
+ 
+                 return;
+             } catch {
+                 if (i === maxRetries) {
+                     throw new Error('MapLibre failed to render canvas');
+                 }
+                 await this.page.reload({ waitUntil: 'domcontentloaded' });
+             }
+         }
+     } */
+
+
 
     async selectLocalAuthorityView() {
         await this.localAuthorityViewCheckBox.check();
@@ -107,7 +135,6 @@ export class ConnectivityToolPage {
         await expect(this.localAuthorityBand).toBeVisible();
         const bandText = await this.localAuthorityBand.textContent();
         console.log('Local Authority Band:', bandText);
-        // const isAorB = bandText?.match(\[A-C]) ? true : false;
         const isAorB = /[ABC]/.test(bandText ?? '')
         expect(isAorB).toBeTruthy();
     }
@@ -138,10 +165,6 @@ export class ConnectivityToolPage {
     async searchLocation(location: string) {
         await this.searchComboBox.click();
         await this.searchComboBox.fill(location);
-        // await this.page.getByRole('option', { name: 'location'}).click();
-        // await this.page.press('searchComboBox','Enter');
-        // const locationOption = this.page.getByRole('option', { name: location });
-        // await locationOption.click();
         // Select the second item from the dropdown list 
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(8000);
@@ -161,12 +184,4 @@ export class ConnectivityToolPage {
             this.openStreetMapLink
         );
     }
-
-    /*async searchLocation(location: string) {
-        const searchInput = this.page.locator('#app-site-search__input');
-        await searchInput.click();
-        await this.page.keyboard.type(location, { delay: 100 });
-        await this.page.locator('.app-site-search__option').nth(0).click();
-        await this.page.waitForTimeout(1500);
-    }*/
 }

@@ -14,8 +14,8 @@ Then('I cancel the location selection and current selection should update to ref
 });
 
 Then('I click on Explore the score link should display expected results {float},{float},{string},{string}', async ({ currentSelectionPage }, expectedCs_latitude: number, expectedCs_longitude: number, expectedLocation: string, expectedSquareID: string) => {
-await currentSelectionPage.exploreTheScore();
-await currentSelectionPage.verifyCurrentSelection(expectedCs_latitude, expectedCs_longitude, expectedLocation, expectedSquareID);
+  await currentSelectionPage.exploreTheScore();
+  await currentSelectionPage.verifyCurrentSelection(expectedCs_latitude, expectedCs_longitude, expectedLocation, expectedSquareID);
 });
 
 

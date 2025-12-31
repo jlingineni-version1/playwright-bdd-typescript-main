@@ -84,11 +84,11 @@ When('I select local authority view {string} & select Score by destination {stri
   await connectivityToolPage.clickMapAtPosition(613, 163);
 });
 
-When('I search for location {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage,page }, location: string, x: number, y: number) => {
+When('I search for location {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, page }, location: string, x: number, y: number) => {
   await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.searchLocation(location);
   await connectivityToolPage.clickMapAtPosition(x, y);
- });
+});
 
 Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage }, location: string, expectedScore: string) => {
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
@@ -114,13 +114,8 @@ Then('I should see the map updated with the selected filtering options {string},
   await expect(connectivityToolPage.LocalAuthorityDropDown).toContainText(authority);
   await expect(connectivityToolPage.scoreByDestinationDropDown).toContainText(destination);
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText(mode);
-  //ToDo add to UTIL Functionality for snapshot comparison
-  // await connectivityToolPage.verifyVisualRegessionOfMap('connectivity-tool-map-authority.png');
   const screenshot = await connectivityToolPage.takeScreenshot();
   await VisualSnapshotHelper.compareScreenshot(screenshot, authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png');
-  /* expect(screenshot).toMatchSnapshot(authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png', {
-   maxDiffPixelRatio: 0.2,   // 20% tolerance
-   maxDiffPixels: 200000,    // absolute pixel count tolerance */
 });
 
 When('I click on Map Tiler link on the connectivity tool map page', async ({ connectivityToolPage }) => {
