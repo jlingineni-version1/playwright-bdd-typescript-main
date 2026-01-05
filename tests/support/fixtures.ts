@@ -3,8 +3,10 @@ import { HomePage } from '../pages/HomePage';
 import { ConnectivityToolPage } from '../pages/ConnectivityToolPage';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { CurrentSelectionPage } from '../pages/CurrentSelectionPage';
-import {MapTilePage} from '../pages/MapTilerPage';
-import {OpenStreetMapPage} from '../pages/OpenStreetMapPage';     
+import { MapTilePage } from '../pages/MapTilerPage';
+import { OpenStreetMapPage } from '../pages/OpenStreetMapPage';
+import { NavigationHelper } from '../helpers/navigatorHelper';
+
 
 type Fixtures = {
   homePage: HomePage;
@@ -13,6 +15,7 @@ type Fixtures = {
   currentSelectionPage: CurrentSelectionPage;
   mapTilePage: MapTilePage;
   openStreetMapPage: OpenStreetMapPage;
+  navigationHelper: NavigationHelper;
 };
 
 export const test = base.extend<Fixtures>({
@@ -44,5 +47,11 @@ export const test = base.extend<Fixtures>({
     const openStreetMapPage = new OpenStreetMapPage(page);
     await use(openStreetMapPage);
   },
+
+  navigationHelper: async ({ page }, use) => {
+    const navigationHelper = new NavigationHelper(page);
+    await use(navigationHelper);
+  },
+
 
 });

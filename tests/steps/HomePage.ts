@@ -4,6 +4,7 @@ import { expect } from '@playwright/test';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { BrowserContext } from 'playwright';
 import { APP_URL } from '../config/env';
+import { NavigationHelper } from '../helpers/navigatorHelper';
 
 const { Given, When, Then } = createBdd(test);
 let context: BrowserContext;
@@ -28,48 +29,48 @@ Then('I should navigate to map successfully', async ({ page }) => {
   await expect(page).toHaveURL(APP_URL);
 });
 
-When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage }) => {
+When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage,navigationHelper }) => {
   await homePage.clickAccessibilityLink();
   await homePage.verifyAccessibilityPage();
-  await homePage.clickBackLink();
+  await navigationHelper.clickBackLink();
 });
 
 Then('navigate back to home page', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });
 
-When('I click on privacy policy link and validate the privacy policy page is displayed successfully', async ({ homePage }) => {
+When('I click on privacy policy link and validate the privacy policy page is displayed successfully', async ({ homePage,navigationHelper}) => {
   await homePage.clickPrivacyPolicyLink();
   await homePage.verifyPrivacyPolicyPage();
   await homePage.verifyPrivacyPolicyPageURL();
-  await homePage.clickBackLink();
+  await navigationHelper.clickBackLink();
 });
 
 Then('navigate back to home page from privacy policy', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });
 
-When('I click on nav header guidance link and validate the guidance page is displayed successfully', async ({ homePage }) => {
+When('I click on nav header guidance link and validate the guidance page is displayed successfully', async ({ homePage,navigationHelper }) => {
   await homePage.clickOnNavGuidanceLink();
   await homePage.verifyGuidancePage();
   await homePage.clickGuidanceClickableLink();
   await homePage.verifyGuidancePageURL();
-  await homePage.clickBackLink();
+  await navigationHelper.clickBackLink();
 });
 
-When('I click on guidance link and validate the guidance page is displayed successfully', async ({ homePage }) => {
+When('I click on guidance link and validate the guidance page is displayed successfully', async ({ homePage, navigationHelper }) => {
   await homePage.clickGuidanceLink();
   await homePage.verifyGuidancePage();
   await homePage.clickGuidanceClickableLink();
   await homePage.verifyGuidancePageURL();
-  await homePage.clickBackLink();
+  await navigationHelper.clickBackLink();
 });
 
-When('I click on understand the data link and validate the understand the data page is displayed successfully', async ({ homePage }) => {
+When('I click on understand the data link and validate the understand the data page is displayed successfully', async ({ homePage, navigationHelper }) => {
   await homePage.understandDataLink.click();
   await homePage.verifyUnderstandDataPage();
   await homePage.verifyUnderstandDataPageURL();
-  await homePage.clickBackLink();
+  await navigationHelper.clickBackLink();
 });
 
 
