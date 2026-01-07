@@ -22,6 +22,7 @@ export class HomePage {
     readonly activeTravelEnglandTitle;
     readonly exploreTheMapTitle;
     readonly guidanceHeaderLink;
+    readonly connectivityToolPage;
 
 
     constructor(private page: Page) {
@@ -44,7 +45,7 @@ export class HomePage {
         this.activeTravelEnglandTitle = page.getByRole('img', { name: 'Logo for Active Travel England' });
         this.exploreTheMapTitle = page.getByRole('heading', { name: 'Explore the map' });
         this.guidanceHeaderLink = page.getByRole('navigation').getByRole('link', { name: 'Guidance' });
-
+        this.connectivityToolPage = page.locator('.govuk-template__body.js-enabled.govuk-frontend-supported');
     }
 
     async titlesVisible() {
@@ -62,12 +63,16 @@ export class HomePage {
 
 
     async navigate() {
-        // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/index');
         await this.page.goto(BASE_URL);
     }
 
+    // Method to take screenshot of the canvas element
+    async takeConnectivityToolFullPageScreenshot(filePath: string): Promise<Buffer> {
+        await this.page.waitForLoadState('networkidle');
+        return await this.page.screenshot({ path: filePath, fullPage: true });
+    }
+
     async navigateToConnectivityToolMap() {
-        // await this.page.goto('https://connectivity-tool-lite-test.dft.gov.uk/app#14/52.879/-0.47');
         await this.page.goto(MAP_URL);
     }
 
@@ -96,7 +101,6 @@ export class HomePage {
     }
 
     async verifyAccessibilityPageURL() {
-        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/accessibility-statement');
         await expect(this.page).toHaveURL(Accesibility_URL);
     }
 
@@ -105,7 +109,7 @@ export class HomePage {
     }
 
     async verifyPrivacyPolicyPageURL() {
-        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/privacy-policy');
+
         await expect(this.page).toHaveURL(Private_Policy_URL);
     }
     async clickGuidanceLink() {
@@ -121,7 +125,7 @@ export class HomePage {
     }
 
     async verifyGuidancePageURL() {
-        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/guidance');
+
         await expect(this.page).toHaveURL(Guidance_URL);
     }
     async clickUnderstandDataLink() {
@@ -133,7 +137,7 @@ export class HomePage {
     }
 
     async verifyUnderstandDataPageURL() {
-        // await expect(this.page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/help/understand-the-data');
+
         await expect(this.page).toHaveURL(Understand_Data_URL);
     }
 

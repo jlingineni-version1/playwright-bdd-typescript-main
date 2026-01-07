@@ -41,37 +41,17 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToLoad() {
-        // await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
         await this.page.waitForLoadState('networkidle');
-        // this.waitForMapLibreDomFallback();
         await this.page.waitForFunction(() => {
             const canvas = document.querySelector('canvas');
             return canvas && canvas.width > 0 && canvas.height > 0;
         });
     }
 
-    /* private async waitForMapLibreDomFallback(maxRetries = 3): Promise<void> {
-         for (let i = 1; i <= maxRetries; i++) {
-             try {
-                 await this.page.waitForSelector('.maplibregl-canvas', { timeout: 5000 });
- 
-                 await this.page.waitForFunction(() => {
-                     const canvas = document.querySelector('.maplibregl-canvas') as any;
-                     return canvas && canvas.width > 0 && canvas.height > 0;
-                 }, { timeout: 5000 });
- 
-                 return;
-             } catch {
-                 if (i === maxRetries) {
-                     throw new Error('MapLibre failed to render canvas');
-                 }
-                 await this.page.reload({ waitUntil: 'domcontentloaded' });
-             }
-         }
-     } */
-
-
+    async waitForMapToReload() {
+        await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
+    }
 
     async selectLocalAuthorityView() {
         await this.localAuthorityViewCheckBox.check();
@@ -156,6 +136,11 @@ export class ConnectivityToolPage {
 
     async takeScreenshot(): Promise<Buffer> {
         return await this.page.screenshot();
+    }
+
+    // Method to take screenshot of the canvas element
+    async takeCanvasScreenshot(filePath: string): Promise<Buffer> {
+        return await this.mapCanvas.screenshot({ path: filePath });
     }
 
     async navigateToMap() {

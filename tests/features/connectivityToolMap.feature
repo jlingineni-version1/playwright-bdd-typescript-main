@@ -45,6 +45,16 @@ Feature: Connectivity Tool Map Navigation
   # | Newcastle upon Tyne        | Shopping       | Cycling   |
   # | Sheffield                  | Residential    | Driving   |
 
+  @canvasscreenshot @regression
+  Scenario Outline: Verify Canvas screenshot
+    When I select local authority view "<authority>" & select Score by destination "<destination>" & Score by mode of transport "<mode>"
+    Then I should see canvas screenshot updated with the selected filtering options "<authority>", "<destination>", "<mode>","<expectedScore>","<expectedBand>"
+    Examples:
+      | authority    | destination | mode             | expectedScore | expectedBand |
+      | Birmingham   | Leisure     | Cycling          | 85            | [B]          |
+      | Manchester   | Workplaces  | Driving          | 87            | [J]          |
+      | Lincolnshire | Shopping    | Cycling            | 22          | [D]          |
+
   @filtermap @regression
   Scenario Outline: Verify Score on map for different local authorities
     When I search for location "<location>" and select coordinates <x>,<y> on the map & select tile on the map

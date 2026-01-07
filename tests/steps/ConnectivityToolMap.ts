@@ -31,30 +31,32 @@ Then('I should see expected results based on the applied filters', async ({ conn
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText('Cycling');
 });
 
-When('I select local authority view {string} & select tile on the map', async ({ connectivityToolPage }, localAuthority: string) => {
+When('I select local authority view {string} & select tile on the map', async ({ connectivityToolPage,mapHelper }, localAuthority: string) => {
   await connectivityToolPage.navigateToMap()
-  await connectivityToolPage.waitForMapToLoad();
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.verifyFilterMapHeader();
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(localAuthority);
-  await connectivityToolPage.waitForMapToLoad();
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(469, 133);
+  await connectivityToolPage.waitForMapToReload();
 });
 
 Then('I should see the connectivity score displayed correctly on the map for {string} as {string} ', async ({ connectivityToolPage, page }, location: string, expectedScore: string) => {
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
 });
 
-When('I select local authority view {string} & enable show authority band checkbox', async ({ connectivityToolPage }, localAuthority: string) => {
+When('I select local authority view {string} & enable show authority band checkbox', async ({ connectivityToolPage,mapHelper }, localAuthority: string) => {
   await connectivityToolPage.navigateToMap();
-  await connectivityToolPage.waitForMapToLoad();
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.verifyFilterMapHeader();
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(localAuthority);
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.clickMapAtPosition(469, 133);
+  await connectivityToolPage.waitForMapToReload();
 });
 
 Then('I should see the authority bands displayed correctly on the map', async ({ connectivityToolPage, page }) => {
@@ -71,9 +73,9 @@ When('I select localauthorityview as {string} & select Scorebydestination as {st
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
 });
 
-When('I select local authority view {string} & select Score by destination {string} & Score by mode of transport {string}', async ({ connectivityToolPage }, authority: string, destination: string, mode: string) => {
+When('I select local authority view {string} & select Score by destination {string} & Score by mode of transport {string}', async ({ connectivityToolPage,mapHelper }, authority: string, destination: string, mode: string) => {
   await connectivityToolPage.navigateToMap();
-  await connectivityToolPage.waitForMapToLoad();
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.verifyFilterMapHeader();
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
@@ -82,12 +84,14 @@ When('I select local authority view {string} & select Score by destination {stri
   await connectivityToolPage.selectScoreByDestination(destination);
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
   await connectivityToolPage.clickMapAtPosition(613, 163);
+  await connectivityToolPage.waitForMapToReload();
 });
 
-When('I search for location {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, page }, location: string, x: number, y: number) => {
-  await connectivityToolPage.waitForMapToLoad();
+When('I search for location {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number) => {
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.searchLocation(location);
   await connectivityToolPage.clickMapAtPosition(x, y);
+  await connectivityToolPage.waitForMapToReload();
 });
 
 Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage }, location: string, expectedScore: string) => {
@@ -116,6 +120,19 @@ Then('I should see the map updated with the selected filtering options {string},
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText(mode);
   const screenshot = await connectivityToolPage.takeScreenshot();
   await VisualSnapshotHelper.compareScreenshot(screenshot, authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png');
+});
+
+
+Then('I should see canvas screenshot updated with the selected filtering options {string}, {string}, {string},{string},{string}', async ({ connectivityToolPage }, authority: string, destination: string, mode: string, expectedScore: string, expectedBand: string) => {
+  await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
+  await connectivityToolPage.verifyLocalAuthorityBandForDIfferentLocations(expectedBand);
+  await expect(connectivityToolPage.localAuthorityViewCheckBox).toBeChecked();
+  await expect(connectivityToolPage.showAuthorityBandcheckBox).toBeChecked();
+  await expect(connectivityToolPage.LocalAuthorityDropDown).toContainText(authority);
+  await expect(connectivityToolPage.scoreByDestinationDropDown).toContainText(destination);
+  await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText(mode);
+  const screenshot = await connectivityToolPage.takeCanvasScreenshot('tests/screenshots/mapCavas.png');
+  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, authority + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
 });
 
 When('I click on Map Tiler link on the connectivity tool map page', async ({ connectivityToolPage }) => {

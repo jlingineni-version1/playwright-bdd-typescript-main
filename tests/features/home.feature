@@ -8,6 +8,11 @@ Feature: Home Page Login Functionality
     When I click the explore connectivity tool link
     Then I should navigate to map successfully
 
+  @home @smoke @fullpagescreenshot
+  Scenario:Test Full page screenshot of Connectivity Tool map
+    When I click explore connectivity tool link and take connectivity full page screenshot
+    Then I should navigate to map successfully
+
   @accessibility_footerLink @footer @regression
   Scenario:Home page accessibility check
     When I click the on accessibility check and validate the accessibility statement page is displayed successfully
@@ -23,7 +28,7 @@ Feature: Home Page Login Functionality
     When I click on guidance link and validate the guidance page is displayed successfully
     Then navigate back to home page
 
-  @guidance_headerLink @regression
+  @guidance_headerLink @regression @footer
   Scenario:Home page nav header guidance link check
     When I click on nav header guidance link and validate the guidance page is displayed successfully
     Then navigate back to home page
