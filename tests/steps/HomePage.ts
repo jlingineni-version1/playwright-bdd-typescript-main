@@ -3,7 +3,7 @@ import { test } from '../support/fixtures';
 import { expect } from '@playwright/test';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { BrowserContext } from 'playwright';
-import { APP_URL } from '../config/env';
+import { APP_URL, FULLPAGE_URL } from '../config/env';
 import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
 
 const { Given, When, Then } = createBdd(test);
@@ -34,6 +34,10 @@ When('I click explore connectivity tool link and take connectivity full page scr
 
 Then('I should navigate to map successfully', async ({ page }) => {
   await expect(page).toHaveURL(APP_URL);
+});
+
+Then('I should successfully capture a full-page screenshot of the connectivity map', async ({ page }) => {
+  await expect(page).toHaveURL(FULLPAGE_URL);
 });
 
 When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage, navigationHelper }) => {

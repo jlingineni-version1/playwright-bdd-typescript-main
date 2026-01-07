@@ -53,7 +53,7 @@ Feature: Connectivity Tool Map Navigation
       | authority    | destination | mode             | expectedScore | expectedBand |
       | Birmingham   | Leisure     | Cycling          | 85            | [B]          |
       | Manchester   | Workplaces  | Driving          | 87            | [J]          |
-      | Lincolnshire | Shopping    | Cycling            | 22          | [D]          |
+      | Lincolnshire | Shopping    | Cycling          | 22           | [D]          |
 
   @filtermap @regression
   Scenario Outline: Verify Score on map for different local authorities

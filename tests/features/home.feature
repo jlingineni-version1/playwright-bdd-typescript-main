@@ -11,7 +11,7 @@ Feature: Home Page Login Functionality
   @home @smoke @fullpagescreenshot
   Scenario:Test Full page screenshot of Connectivity Tool map
     When I click explore connectivity tool link and take connectivity full page screenshot
-    Then I should navigate to map successfully
+    Then I should successfully capture a full-page screenshot of the connectivity map
 
   @accessibility_footerLink @footer @regression
   Scenario:Home page accessibility check
