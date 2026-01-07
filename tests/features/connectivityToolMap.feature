@@ -46,14 +46,15 @@ Feature: Connectivity Tool Map Navigation
   # | Sheffield                  | Residential    | Driving   |
 
   @canvasscreenshot @regression
-  Scenario Outline: Verify Canvas screenshot
+  Scenario Outline: Verify Canvas screenshot for different locations
+  
     When I select local authority view "<authority>" & select Score by destination "<destination>" & Score by mode of transport "<mode>"
     Then I should see canvas screenshot updated with the selected filtering options "<authority>", "<destination>", "<mode>","<expectedScore>","<expectedBand>"
     Examples:
       | authority    | destination | mode             | expectedScore | expectedBand |
       | Birmingham   | Leisure     | Cycling          | 85            | [B]          |
       | Manchester   | Workplaces  | Driving          | 87            | [J]          |
-      | Lincolnshire | Shopping    | Cycling          | 22           | [D]          |
+      | Lincolnshire | Shopping    | Cycling          | 22            | [D]          |
 
   @filtermap @regression
   Scenario Outline: Verify Score on map for different local authorities
