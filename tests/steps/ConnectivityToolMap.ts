@@ -94,6 +94,20 @@ When('I search for location {string} and select coordinates {int},{int} on the m
   await connectivityToolPage.waitForMapToReload();
 });
 
+When('I select location {string},coordinates {int},{int},tile on the map & select Map {string}', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number,opacity:string) => {
+  await mapHelper.waitForMapToLoad();
+  await connectivityToolPage.searchLocation(location);
+  await connectivityToolPage.clickMapAtPosition(x, y);
+  // await connectivityToolPage.waitForMapToReload();
+  await connectivityToolPage.clickSettingsLink();
+  await connectivityToolPage.selectOpacitySlider(opacity);
+  });
+
+Then('I capture a canvas screenshot of the map with the {string} percentage applied for {string}', async ({ connectivityToolPage }, location: string,opacity:string) => {
+  const screenshot = await connectivityToolPage.takeCanvasScreenshot('tests/screenshots/mapOpacity.png');
+  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + opacity + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
+});
+
 Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage }, location: string, expectedScore: string) => {
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
 });

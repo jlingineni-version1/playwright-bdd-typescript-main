@@ -16,6 +16,9 @@ export class ConnectivityToolPage {
     readonly searchComboBox;
     readonly mapTilerLink;
     readonly openStreetMapLink;
+    readonly settingsLink;
+    readonly opacitySlider;
+    readonly opacityDisplay;
 
     constructor(private page: Page) {
         this.filterMapHeader = this.page.getByRole('heading', { name: 'Filter map' });
@@ -32,12 +35,23 @@ export class ConnectivityToolPage {
         this.searchComboBox = this.page.getByRole('combobox', { name: 'Search by coordinates, street' });
         this.mapTilerLink = this.page.getByRole('link', { name: 'MapTiler' });
         this.openStreetMapLink = this.page.getByRole('link', { name: 'OpenStreetMap contributors' });
+        this.settingsLink = this.page.getByRole('link', { name: 'Settings' });
+        this.opacitySlider = this.page.getByTestId('opacity');
+        this.opacityDisplay = this.page.getByTestId('map-opacity');
+    }
+
+    async clickSettingsLink() {
+        await this.settingsLink.click();
+    }
+
+    async selectOpacitySlider(percentage: string) {
+        await this.opacitySlider.fill(percentage);
+        await this.page.waitForTimeout(30000);
     }
 
     async verifyFilterMapHeader() {
         await expect(this.filterMapHeader).toBeVisible();
         await expect(this.filterMapHeader).toHaveText('Filter map');
-
     }
 
     async waitForMapToLoad() {

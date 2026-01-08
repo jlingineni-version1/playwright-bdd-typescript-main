@@ -12,6 +12,7 @@
     "bdd:test:home": "npm run bdd:generate && npx playwright test .features-gen --grep @home",
     "bdd:test:footer": "npm run bdd:generate && npx playwright test .features-gen --grep @footer",
     "bdd:test:canvasscreenshot": "npm run bdd:generate && npx playwright test .features-gen --grep @canvasscreenshot",
+    "bdd:test:settings_canvasscreenshot": "npm run bdd:generate && npx playwright test .features-gen --grep @settings_canvasscreenshot",
     "bdd:test:fullpagescreenshot": "npm run bdd:generate && npx playwright test .features-gen --grep @fullpagescreenshot",
     "bdd:test:filtermap": "npm run bdd:generate && npx playwright test .features-gen --grep @filtermap",
     "bdd:test:smoke": "npm run bdd:generate && npx playwright test .features-gen --grep @smoke",
