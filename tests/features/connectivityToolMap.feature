@@ -46,7 +46,7 @@ Feature: Connectivity Tool Map Navigation
   # | Sheffield                  | Residential    | Driving   |
 
   @canvasscreenshot @regression
-  Scenario Outline: Verify Canvas screenshot for different locations
+  Scenario Outline: Verify canvas screenshot for different locations
     When I select local authority view "<authority>" & select Score by destination "<destination>" & Score by mode of transport "<mode>"
     Then I should see canvas screenshot updated with the selected filtering options "<authority>", "<destination>", "<mode>","<expectedScore>","<expectedBand>"
     Examples:
@@ -55,19 +55,30 @@ Feature: Connectivity Tool Map Navigation
       | Manchester   | Workplaces  | Driving | 87            | [J]          |
       | Lincolnshire | Shopping    | Cycling | 22            | [D]          |
 
-      
-@settings_canvasscreenshot @regression
-  Scenario Outline: Verify canvas screenshot for different settings
+  @canvasscreenshot @regression
+  Scenario Outline: Verify canvas screenshot for different Map Opacity settings
     When I select location "<location>",coordinates <x>,<y>,tile on the map & select Map "<opacity>"
     Then I capture a canvas screenshot of the map with the "<opacity>" percentage applied for "<location>"
     Examples:
-      |location                                                  | expectedScore | x   | y   |opacity|
-      |Blackpool, Borough of Blackpool, England, United Kingdom  | 65            | 811 | 233 |0.05   |
-      |Blackpool, Borough of Blackpool, England, United Kingdom  | 65            | 811 | 233 |0.25   |
-      |Blackpool, Borough of Blackpool, England, United Kingdom  | 65            | 811 | 233 |0.5    |
-      |Blackpool, Borough of Blackpool, England, United Kingdom  | 65            | 811 | 233 |0.75   |
-      |Blackpool, Borough of Blackpool, England, United Kingdom  | 65            | 811 | 233 |1      |
-    
+      | location                                                 | expectedScore | x   | y   | opacity |
+      | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 0.05    |
+      | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 0.25    |
+      | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 0.5     |
+      | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 0.75    |
+      | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 1       |
+
+  @settings_canvasscreenshot @regression
+  Scenario Outline: Verify canvas screenshot for different public transport stops
+    When I select local authority view "<authority>",Score by destination "<destination>",Score by mode of transport "<mode>",public transport "<publictransport>"
+    Then capture a canvas screenshot of the map for "<authority>" with all "<publictransport>" stops
+    Examples:
+      | authority      | destination | mode             | publictransport   |
+      | City of London | Education   | Walking          | Bus / Coach Bus / |
+      | City of London | Health      | Driving          | National Rail     |
+      | City of London | Workplaces  | Public transport | Tube / Metro / LR |
+      | City of London | Shopping    | Driving          | Ferry             |
+      | Blackpool      | Leisure     | Driving          | Tram Tram         |
+
   @filtermap @regression
   Scenario Outline: Verify Score on map for different local authorities
     When I search for location "<location>" and select coordinates <x>,<y> on the map & select tile on the map

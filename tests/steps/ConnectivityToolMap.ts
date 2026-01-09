@@ -31,7 +31,7 @@ Then('I should see expected results based on the applied filters', async ({ conn
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText('Cycling');
 });
 
-When('I select local authority view {string} & select tile on the map', async ({ connectivityToolPage,mapHelper }, localAuthority: string) => {
+When('I select local authority view {string} & select tile on the map', async ({ connectivityToolPage, mapHelper }, localAuthority: string) => {
   await connectivityToolPage.navigateToMap()
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.verifyFilterMapHeader();
@@ -47,7 +47,7 @@ Then('I should see the connectivity score displayed correctly on the map for {st
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
 });
 
-When('I select local authority view {string} & enable show authority band checkbox', async ({ connectivityToolPage,mapHelper }, localAuthority: string) => {
+When('I select local authority view {string} & enable show authority band checkbox', async ({ connectivityToolPage, mapHelper }, localAuthority: string) => {
   await connectivityToolPage.navigateToMap();
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.verifyFilterMapHeader();
@@ -73,7 +73,7 @@ When('I select localauthorityview as {string} & select Scorebydestination as {st
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
 });
 
-When('I select local authority view {string} & select Score by destination {string} & Score by mode of transport {string}', async ({ connectivityToolPage,mapHelper }, authority: string, destination: string, mode: string) => {
+When('I select local authority view {string} & select Score by destination {string} & Score by mode of transport {string}', async ({ connectivityToolPage, mapHelper }, authority: string, destination: string, mode: string) => {
   await connectivityToolPage.navigateToMap();
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.verifyFilterMapHeader();
@@ -87,6 +87,21 @@ When('I select local authority view {string} & select Score by destination {stri
   await connectivityToolPage.waitForMapToReload();
 });
 
+When('I select local authority view {string},Score by destination {string},Score by mode of transport {string},public transport {string}', async ({ connectivityToolPage, mapHelper }, authority: string, destination: string, mode: string, publictransport: string) => {
+  await connectivityToolPage.navigateToMap();
+  await mapHelper.waitForMapToLoad();
+  await connectivityToolPage.verifyFilterMapHeader();
+  await connectivityToolPage.clickShowButton();
+  await connectivityToolPage.selectLocalAuthorityView();
+  await connectivityToolPage.selectLocalAuthority(authority);
+  await connectivityToolPage.selectShowAuthorityBand();
+  await connectivityToolPage.selectScoreByDestination(destination);
+  await connectivityToolPage.selectScoreByModeOfTransport(mode);
+  await connectivityToolPage.clickPublicTransportShowLink();
+  await connectivityToolPage.checkPublicTransport(publictransport);
+});
+
+
 When('I search for location {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number) => {
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.searchLocation(location);
@@ -94,17 +109,21 @@ When('I search for location {string} and select coordinates {int},{int} on the m
   await connectivityToolPage.waitForMapToReload();
 });
 
-When('I select location {string},coordinates {int},{int},tile on the map & select Map {string}', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number,opacity:string) => {
+When('I select location {string},coordinates {int},{int},tile on the map & select Map {string}', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number, opacity: string) => {
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.searchLocation(location);
   await connectivityToolPage.clickMapAtPosition(x, y);
-  // await connectivityToolPage.waitForMapToReload();
   await connectivityToolPage.clickSettingsLink();
   await connectivityToolPage.selectOpacitySlider(opacity);
-  });
+});
 
-Then('I capture a canvas screenshot of the map with the {string} percentage applied for {string}', async ({ connectivityToolPage }, location: string,opacity:string) => {
-  const screenshot = await connectivityToolPage.takeCanvasScreenshot('tests/screenshots/mapOpacity.png');
+Then('capture a canvas screenshot of the map for {string} with all {string} stops', async ({ connectivityToolPage }, location: string, publictransport: string) => {
+  const screenshot = await connectivityToolPage.takeCanvasScreenshot();
+  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + publictransport + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
+});
+
+Then('I capture a canvas screenshot of the map with the {string} percentage applied for {string}', async ({ connectivityToolPage }, location: string, opacity: string) => {
+  const screenshot = await connectivityToolPage.takeCanvasScreenshot();
   await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + opacity + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
 });
 
@@ -145,7 +164,7 @@ Then('I should see canvas screenshot updated with the selected filtering options
   await expect(connectivityToolPage.LocalAuthorityDropDown).toContainText(authority);
   await expect(connectivityToolPage.scoreByDestinationDropDown).toContainText(destination);
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText(mode);
-  const screenshot = await connectivityToolPage.takeCanvasScreenshot('tests/screenshots/mapCavas.png');
+  const screenshot = await connectivityToolPage.takeCanvasScreenshot();
   await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, authority + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
 });
 

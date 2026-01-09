@@ -19,10 +19,14 @@ export class ConnectivityToolPage {
     readonly settingsLink;
     readonly opacitySlider;
     readonly opacityDisplay;
+    readonly publicTransportShowLink;
+    readonly showPublicTrasportHeading;
+    readonly zoomOutButton;
 
     constructor(private page: Page) {
         this.filterMapHeader = this.page.getByRole('heading', { name: 'Filter map' });
         this.showButton = this.page.getByText('Show', { exact: true }).first();
+        this.publicTransportShowLink = this.page.getByText('Show', { exact: true }).last();
         this.localAuthorityViewCheckBox = this.page.getByRole('checkbox', { name: 'Local authority view' });
         this.scoreByDestinationDropDown = this.page.getByLabel('Score by destination');
         this.scoreByModeOfTransportDropDown = this.page.getByLabel('Score by mode of transport');
@@ -38,10 +42,16 @@ export class ConnectivityToolPage {
         this.settingsLink = this.page.getByRole('link', { name: 'Settings' });
         this.opacitySlider = this.page.getByTestId('opacity');
         this.opacityDisplay = this.page.getByTestId('map-opacity');
+        this.zoomOutButton = this.page.getByRole('button', { name: 'Zoom out' });
+        this.showPublicTrasportHeading = page.getByRole('heading', { name: 'Show public transport stops' });
     }
 
     async clickSettingsLink() {
         await this.settingsLink.click();
+    }
+
+    async clickZoomOut() {
+        await this.zoomOutButton.click();
     }
 
     async selectOpacitySlider(percentage: string) {
@@ -69,6 +79,20 @@ export class ConnectivityToolPage {
 
     async selectLocalAuthorityView() {
         await this.localAuthorityViewCheckBox.check();
+    }
+
+    async checkPublicTransport(publicTransport: string) {
+        if (publicTransport.includes('Tram Tram') || publicTransport.includes('Ferry')) {
+            await this.clickZoomOut();
+            await this.clickZoomOut();
+        }
+        const transport = await this.page.getByRole('checkbox', { name: `Icon for ${publicTransport}` })
+        await transport.check();
+        await this.page.waitForTimeout(8000);
+    }
+
+    async clickPublicTransportShowLink() {
+        await this.publicTransportShowLink.click();
     }
 
     async selectScoreByDestination(destination: string) {
@@ -153,8 +177,8 @@ export class ConnectivityToolPage {
     }
 
     // Method to take screenshot of the canvas element
-    async takeCanvasScreenshot(filePath: string): Promise<Buffer> {
-        return await this.mapCanvas.screenshot({ path: filePath });
+    async takeCanvasScreenshot(): Promise<Buffer> {
+        return await this.mapCanvas.screenshot();
     }
 
     async navigateToMap() {
@@ -168,7 +192,6 @@ export class ConnectivityToolPage {
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(8000);
     }
-
 
     async clickMapTilerLink(): Promise<Page> {
         return await PopupHelper.clickAndWaitForPopup(

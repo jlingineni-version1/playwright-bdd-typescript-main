@@ -13,32 +13,32 @@ Feature: Home Page Login Functionality
     When I click explore connectivity tool link and take connectivity full page screenshot
     Then I should successfully capture a full-page screenshot of the connectivity map
 
-  @accessibility_footerLink @footer @regression
+  @footer @regression
   Scenario:Home page accessibility check
     When I click the on accessibility check and validate the accessibility statement page is displayed successfully
     Then navigate back to home page
 
-  @privacypolicy_footerLink @footer @regression
+  @footer @regression
   Scenario:Home page privacy policy check
     When I click on privacy policy link and validate the privacy policy page is displayed successfully
     Then navigate back to home page
 
-  @guidance_footerLink @footer @regression
+  @footer @regression
   Scenario:Home page guidance link check
     When I click on guidance link and validate the guidance page is displayed successfully
     Then navigate back to home page
 
-  @guidance_headerLink @regression @footer
+  @regression @footer
   Scenario:Home page nav header guidance link check
     When I click on nav header guidance link and validate the guidance page is displayed successfully
     Then navigate back to home page
 
-  @understandData_footerLink @footer @regression
+  @footer @regression
   Scenario:Home page understand the data link check
     When I click on understand the data link and validate the understand the data page is displayed successfully
     Then navigate back to home page
 
-  @feedbacKLink @footer @regression
+  @feedbacKLink @regression
   Scenario:Home page feedback link check
     When I click on feedback link and validate the feedback page is submitted successfully
     Then navigate back to home page
