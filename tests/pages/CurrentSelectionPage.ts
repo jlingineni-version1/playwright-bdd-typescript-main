@@ -32,7 +32,6 @@ export class CurrentSelectionPage {
         const actualLongitudeText = await this.longitude.textContent();
         console.log('Longitude:', actualLongitudeText);
         const expectedLocationText = `${expectedLocation}Greater London`;
-
         const actualLatitude = Number((await this.latitude.textContent())?.trim());
         const actualLongitude = Number((await this.longitude.textContent())?.trim())
         expect(actualsquareID).toBe(expectedSquareID);
@@ -48,6 +47,7 @@ export class CurrentSelectionPage {
     async verifyWarningMessage() {
         await expect(this.warningMessage).toBeVisible();
     }
+
     async exploreTheScore() {
         await this.exploreTheScoreLink.click();
     }

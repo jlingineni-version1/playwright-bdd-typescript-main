@@ -3,8 +3,8 @@ import { test } from '../support/fixtures';
 import { expect } from '@playwright/test';
 import { FeedbackPage } from '../pages/FeedbackPage';
 import { BrowserContext } from 'playwright';
-import { APP_URL } from '../config/env';
-import { NavigationHelper } from '../helpers/navigatorHelper';
+import { APP_URL, FULLPAGE_URL } from '../config/env';
+import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
 
 const { Given, When, Then } = createBdd(test);
 let context: BrowserContext;
@@ -24,12 +24,23 @@ When('I click the explore connectivity tool link', async ({ homePage }) => {
   await homePage.clickConnectivityToolLink();
 });
 
+When('I click explore connectivity tool link and take connectivity full page screenshot', async ({ homePage, page, mapHelper }) => {
+  await homePage.clickConnectivityToolLink();
+  await expect(page).toHaveURL(APP_URL);
+  await mapHelper.waitForMapToLoad();
+  const screenshot = await homePage.takeConnectivityToolFullPageScreenshot('tests/screenshots/connectivitytool.png');
+  await VisualSnapshotHelper.connectivityToolFullPageScreenshot(screenshot, 'tests/screenshots/connectivitytool.png');
+});
+
 Then('I should navigate to map successfully', async ({ page }) => {
-  // await expect(page).toHaveURL('https://connectivity-tool-lite-test.dft.gov.uk/app');
   await expect(page).toHaveURL(APP_URL);
 });
 
-When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage,navigationHelper }) => {
+Then('I should successfully capture a full-page screenshot of the connectivity map', async ({ page }) => {
+  await expect(page).toHaveURL(FULLPAGE_URL);
+});
+
+When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage, navigationHelper }) => {
   await homePage.clickAccessibilityLink();
   await homePage.verifyAccessibilityPage();
   await navigationHelper.clickBackLink();
@@ -39,7 +50,7 @@ Then('navigate back to home page', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });
 
-When('I click on privacy policy link and validate the privacy policy page is displayed successfully', async ({ homePage,navigationHelper}) => {
+When('I click on privacy policy link and validate the privacy policy page is displayed successfully', async ({ homePage, navigationHelper }) => {
   await homePage.clickPrivacyPolicyLink();
   await homePage.verifyPrivacyPolicyPage();
   await homePage.verifyPrivacyPolicyPageURL();
@@ -50,7 +61,7 @@ Then('navigate back to home page from privacy policy', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });
 
-When('I click on nav header guidance link and validate the guidance page is displayed successfully', async ({ homePage,navigationHelper }) => {
+When('I click on nav header guidance link and validate the guidance page is displayed successfully', async ({ homePage, navigationHelper }) => {
   await homePage.clickOnNavGuidanceLink();
   await homePage.verifyGuidancePage();
   await homePage.clickGuidanceClickableLink();

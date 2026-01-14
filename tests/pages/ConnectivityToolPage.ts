@@ -16,10 +16,17 @@ export class ConnectivityToolPage {
     readonly searchComboBox;
     readonly mapTilerLink;
     readonly openStreetMapLink;
+    readonly settingsLink;
+    readonly opacitySlider;
+    readonly opacityDisplay;
+    readonly publicTransportShowLink;
+    readonly showPublicTrasportHeading;
+    readonly zoomOutButton;
 
     constructor(private page: Page) {
         this.filterMapHeader = this.page.getByRole('heading', { name: 'Filter map' });
         this.showButton = this.page.getByText('Show', { exact: true }).first();
+        this.publicTransportShowLink = this.page.getByText('Show', { exact: true }).last();
         this.localAuthorityViewCheckBox = this.page.getByRole('checkbox', { name: 'Local authority view' });
         this.scoreByDestinationDropDown = this.page.getByLabel('Score by destination');
         this.scoreByModeOfTransportDropDown = this.page.getByLabel('Score by mode of transport');
@@ -32,49 +39,60 @@ export class ConnectivityToolPage {
         this.searchComboBox = this.page.getByRole('combobox', { name: 'Search by coordinates, street' });
         this.mapTilerLink = this.page.getByRole('link', { name: 'MapTiler' });
         this.openStreetMapLink = this.page.getByRole('link', { name: 'OpenStreetMap contributors' });
+        this.settingsLink = this.page.getByRole('link', { name: 'Settings' });
+        this.opacitySlider = this.page.getByTestId('opacity');
+        this.opacityDisplay = this.page.getByTestId('map-opacity');
+        this.zoomOutButton = this.page.getByRole('button', { name: 'Zoom out' });
+        this.showPublicTrasportHeading = page.getByRole('heading', { name: 'Show public transport stops' });
+    }
+
+    async clickSettingsLink() {
+        await this.settingsLink.click();
+    }
+
+    async clickZoomOut() {
+        await this.zoomOutButton.click();
+    }
+
+    async selectOpacitySlider(percentage: string) {
+        await this.opacitySlider.fill(percentage);
+        await this.page.waitForTimeout(30000);
     }
 
     async verifyFilterMapHeader() {
         await expect(this.filterMapHeader).toBeVisible();
         await expect(this.filterMapHeader).toHaveText('Filter map');
-
     }
 
     async waitForMapToLoad() {
-        // await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
         await this.page.waitForLoadState('networkidle');
-        // this.waitForMapLibreDomFallback();
         await this.page.waitForFunction(() => {
             const canvas = document.querySelector('canvas');
             return canvas && canvas.width > 0 && canvas.height > 0;
         });
     }
 
-    /* private async waitForMapLibreDomFallback(maxRetries = 3): Promise<void> {
-         for (let i = 1; i <= maxRetries; i++) {
-             try {
-                 await this.page.waitForSelector('.maplibregl-canvas', { timeout: 5000 });
- 
-                 await this.page.waitForFunction(() => {
-                     const canvas = document.querySelector('.maplibregl-canvas') as any;
-                     return canvas && canvas.width > 0 && canvas.height > 0;
-                 }, { timeout: 5000 });
- 
-                 return;
-             } catch {
-                 if (i === maxRetries) {
-                     throw new Error('MapLibre failed to render canvas');
-                 }
-                 await this.page.reload({ waitUntil: 'domcontentloaded' });
-             }
-         }
-     } */
-
-
+    async waitForMapToReload() {
+        await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
+    }
 
     async selectLocalAuthorityView() {
         await this.localAuthorityViewCheckBox.check();
+    }
+
+    async checkPublicTransport(publicTransport: string) {
+        if (publicTransport.includes('Tram Tram') || publicTransport.includes('Ferry')) {
+            await this.clickZoomOut();
+            await this.clickZoomOut();
+        }
+        const transport = await this.page.getByRole('checkbox', { name: `Icon for ${publicTransport}` })
+        await transport.check();
+        await this.page.waitForTimeout(8000);
+    }
+
+    async clickPublicTransportShowLink() {
+        await this.publicTransportShowLink.click();
     }
 
     async selectScoreByDestination(destination: string) {
@@ -158,6 +176,11 @@ export class ConnectivityToolPage {
         return await this.page.screenshot();
     }
 
+    // Method to take screenshot of the canvas element
+    async takeCanvasScreenshot(): Promise<Buffer> {
+        return await this.mapCanvas.screenshot();
+    }
+
     async navigateToMap() {
         await this.page.goto('https://connectivity-tool-lite-dev.dft.gov.uk/app#14/52.4948/-1.88139');
     }
@@ -169,7 +192,6 @@ export class ConnectivityToolPage {
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(8000);
     }
-
 
     async clickMapTilerLink(): Promise<Page> {
         return await PopupHelper.clickAndWaitForPopup(

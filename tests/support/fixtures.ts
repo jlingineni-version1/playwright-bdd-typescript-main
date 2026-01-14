@@ -6,6 +6,7 @@ import { CurrentSelectionPage } from '../pages/CurrentSelectionPage';
 import { MapTilePage } from '../pages/MapTilerPage';
 import { OpenStreetMapPage } from '../pages/OpenStreetMapPage';
 import { NavigationHelper } from '../helpers/navigatorHelper';
+import { MapHelper } from '../helpers/map.helper';
 
 
 type Fixtures = {
@@ -16,6 +17,7 @@ type Fixtures = {
   mapTilePage: MapTilePage;
   openStreetMapPage: OpenStreetMapPage;
   navigationHelper: NavigationHelper;
+  mapHelper:MapHelper;
 };
 
 export const test = base.extend<Fixtures>({
@@ -53,5 +55,9 @@ export const test = base.extend<Fixtures>({
     await use(navigationHelper);
   },
 
+   mapHelper: async ({ page }, use) => {
+    const mapHelper = new MapHelper(page);
+    await use(mapHelper);
+  },
 
 });
