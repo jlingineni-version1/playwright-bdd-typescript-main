@@ -155,7 +155,6 @@ Then('I should see the map updated with the selected filtering options {string},
   await VisualSnapshotHelper.compareScreenshot(screenshot, authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png');
 });
 
-
 Then('I should see canvas screenshot updated with the selected filtering options {string}, {string}, {string},{string},{string}', async ({ connectivityToolPage }, authority: string, destination: string, mode: string, expectedScore: string, expectedBand: string) => {
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
   await connectivityToolPage.verifyLocalAuthorityBandForDIfferentLocations(expectedBand);
