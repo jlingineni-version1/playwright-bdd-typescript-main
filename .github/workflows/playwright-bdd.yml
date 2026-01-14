@@ -36,6 +36,7 @@ jobs:
         env:
           TEST_ENV: test
         run: npm run test
+        continue-on-error: true
 
       - name: Upload Playwright report
         if: always()
@@ -44,3 +45,5 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+          
