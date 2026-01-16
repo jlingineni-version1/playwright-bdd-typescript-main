@@ -28,8 +28,8 @@ When('I click explore connectivity tool link and take connectivity full page scr
   await homePage.clickConnectivityToolLink();
   await expect(page).toHaveURL(APP_URL);
   await mapHelper.waitForMapToLoad();
-  const screenshot = await homePage.takeConnectivityToolFullPageScreenshot('tests/screenshots/connectivitytool.png');
-  await VisualSnapshotHelper.connectivityToolFullPageScreenshot(screenshot, 'tests/screenshots/connectivitytool.png');
+  const screenshot = await homePage.takeConnectivityToolFullPageScreenshot();
+  await VisualSnapshotHelper.connectivityToolFullPageScreenshot(screenshot, '-fullscreen-connectivity.png');
 });
 
 Then('I should navigate to map successfully', async ({ page }) => {

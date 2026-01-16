@@ -1,12 +1,15 @@
 
 # Playwright
 node_modules/
+# Runtime/test artifacts (do not commit these):
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-reports/
+/reports/screenshots/current/
 .env
 *.zip
-*.png
-.features-gen/
+
+# Keep `.features-gen/` tracked — compiled test specs and their snapshots
+# are generated under `.features-gen/` and baselines should be committed there.
+# Do NOT ignore `*.png` globally; commit only approved baselines.

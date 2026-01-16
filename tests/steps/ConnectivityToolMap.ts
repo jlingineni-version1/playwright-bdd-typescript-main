@@ -119,12 +119,12 @@ When('I select location {string},coordinates {int},{int},tile on the map & selec
 
 Then('capture a canvas screenshot of the map for {string} with all {string} stops', async ({ connectivityToolPage }, location: string, publictransport: string) => {
   const screenshot = await connectivityToolPage.takeCanvasScreenshot();
-  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + publictransport + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
+  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + publictransport + '-canvas-connectivity.png');
 });
 
 Then('I capture a canvas screenshot of the map with the {string} percentage applied for {string}', async ({ connectivityToolPage }, location: string, opacity: string) => {
   const screenshot = await connectivityToolPage.takeCanvasScreenshot();
-  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + opacity + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
+  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + opacity + '-canvas-connectivity.png');
 });
 
 Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage }, location: string, expectedScore: string) => {
@@ -164,7 +164,7 @@ Then('I should see canvas screenshot updated with the selected filtering options
   await expect(connectivityToolPage.scoreByDestinationDropDown).toContainText(destination);
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText(mode);
   const screenshot = await connectivityToolPage.takeCanvasScreenshot();
-  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, authority + '-canvas-connectivity-tool-map-chromium-win32-chromium-win32.png');
+  await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, authority + '-canvas-connectivity-tool-map.png');
 });
 
 When('I click on Map Tiler link on the connectivity tool map page', async ({ connectivityToolPage }) => {

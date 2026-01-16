@@ -67,10 +67,10 @@ export class HomePage {
     }
 
     // Method to take screenshot of the canvas element
-    async takeConnectivityToolFullPageScreenshot(filePath: string): Promise<Buffer> {
+    async takeConnectivityToolFullPageScreenshot(): Promise<Buffer> {
         await this.page.setViewportSize({ width: 1920, height: 1080 });
         await this.page.waitForLoadState('networkidle');
-        return await this.page.screenshot({ path: filePath, fullPage: true });
+        return await this.page.screenshot({fullPage: true });
     }
 
     async navigateToConnectivityToolMap() {
