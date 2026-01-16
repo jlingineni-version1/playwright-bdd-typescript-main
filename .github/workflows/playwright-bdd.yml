@@ -7,10 +7,10 @@ on:
 
   push:
     branches:
-      - feature/connectivitytool
+      - feature/connectivityTool
   pull_request:
     branches:
-      - feature/connectivitytool
+      - feature/connectivityTool
 
 jobs:
   e2e-tests:
