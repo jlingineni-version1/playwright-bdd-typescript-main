@@ -20,6 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Verify snapshot folder exists
+        run: |
+          echo "Verifying connectivityToolMap snapshot folder..."
+          ls -l .features-gen/tests/features/connectivityToolMap.feature.spec.js-snapshots/
+    
+          echo "Verifying home feature snapshot folder..."
+          ls -l .features-gen/tests/features/home.feature.spec.js-snapshots/
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
