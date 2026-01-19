@@ -36,10 +36,12 @@ jobs:
           ls -R .features-gen/tests/features/connectivityToolMap.feature.spec.js-snapshots/
     
           echo "Verifying home feature snapshot folder..."
-          ls -R .features-gen/tests/features/home.feature.spec.js-snapshots/
+          if [ -d ".features-gen/tests/features/home.feature.spec.js-snapshots/" ]; then
+            ls -R .features-gen/tests/features/home.feature.spec.js-snapshots/
+          else
+            echo "Warning: home.feature.spec.js-snapshots/ directory not found."
+          fi
 
-      - name: Find snapshot files
-        run: |
           echo "Finding snapshot files..."
           find . -type f -name "*.png"
 
