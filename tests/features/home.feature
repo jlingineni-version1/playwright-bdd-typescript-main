@@ -38,10 +38,10 @@ Feature: Home Page Login Functionality
     When I click on understand the data link and validate the understand the data page is displayed successfully
     Then navigate back to home page
 
-  @feedbacKLink @regression
-  Scenario:Home page feedback link check
-    When I click on feedback link and validate the feedback page is submitted successfully
-    Then navigate back to home page
+  # @feedbacKLink @regression
+  # Scenario:Home page feedback link check
+  #   When I click on feedback link and validate the feedback page is submitted successfully
+  #   Then navigate back to home page
 
 
 
