@@ -20,13 +20,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+         # Step to debug repository contents and verify snapshot folders
+      - name: Show current branch and commit
+        run: |
+          echo "Branch: $(Build.SourceBranch)"
+          echo "Commit: $(Build.SourceVersion)"
+
+      - name: List repository files
+        run: |
+          ls -R
+
       - name: Verify snapshot folder exists
         run: |
           echo "Verifying connectivityToolMap snapshot folder..."
-          ls -l .features-gen/tests/features/connectivityToolMap.feature.spec.js-snapshots/
+          ls -R .features-gen/tests/features/connectivityToolMap.feature.spec.js-snapshots/
     
           echo "Verifying home feature snapshot folder..."
-          ls -l .features-gen/tests/features/home.feature.spec.js-snapshots/
+          ls -R.features-gen/tests/features/home.feature.spec.js-snapshots/
+
+      - name: Find snapshot files
+        run: |
+          echo "Finding snapshot files..."
+          find . -type f -name "*.png"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
