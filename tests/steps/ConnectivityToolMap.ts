@@ -152,7 +152,7 @@ Then('I should see the map updated with the selected filtering options {string},
   await expect(connectivityToolPage.scoreByDestinationDropDown).toContainText(destination);
   await expect(connectivityToolPage.scoreByModeOfTransportDropDown).toContainText(mode);
   const screenshot = await connectivityToolPage.takeScreenshot();
-  await VisualSnapshotHelper.compareScreenshot(screenshot, authority + '-connectivity-tool-map-chromium-win32-chromium-win32.png');
+  await VisualSnapshotHelper.compareScreenshot(screenshot, authority + '-connectivity-tool-map.png');
 });
 
 Then('I should see canvas screenshot updated with the selected filtering options {string}, {string}, {string},{string},{string}', async ({ connectivityToolPage }, authority: string, destination: string, mode: string, expectedScore: string, expectedBand: string) => {

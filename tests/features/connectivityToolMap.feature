@@ -55,7 +55,7 @@ Feature: Connectivity Tool Map Navigation
       | Manchester   | Workplaces  | Driving | 87            | [J]          |
       | Lincolnshire | Shopping    | Cycling | 22            | [D]          |
 
-  @canvasscreenshot @regression
+  @settings_canvasscreenshot @regression
   Scenario Outline: Verify canvas screenshot for different Map Opacity settings
     When I select location "<location>",coordinates <x>,<y>,tile on the map & select Map "<opacity>"
     Then I capture a canvas screenshot of the map with the "<opacity>" percentage applied for "<location>"
@@ -67,7 +67,7 @@ Feature: Connectivity Tool Map Navigation
       | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 0.75    |
       | Blackpool, Borough of Blackpool, England, United Kingdom | 65            | 811 | 233 | 1       |
 
-  @settings_canvasscreenshot @regression
+  @canvasscreenshot @regression
   Scenario Outline: Verify canvas screenshot for different public transport stops
     When I select local authority view "<authority>",Score by destination "<destination>",Score by mode of transport "<mode>",public transport "<publictransport>"
     Then capture a canvas screenshot of the map for "<authority>" with all "<publictransport>" stops

@@ -23,8 +23,8 @@ jobs:
          # Step to debug repository contents and verify snapshot folders
       - name: Show current branch and commit
         run: |
-          echo "Branch: $(Build.SourceBranch)"
-          echo "Commit: $(Build.SourceVersion)"
+          echo "Branch: $GITHUB_REF"
+          echo "Commit: $GITHUB_SHA"
 
       - name: List repository files
         run: |
@@ -60,8 +60,28 @@ jobs:
       - name: Run Playwright BDD tests
         env:
           TEST_ENV: test
-        run: npm run test
-        continue-on-error: true
+        run: npx playwright test
+
+      - name: List produced snapshot and test results
+        if: always()
+        run: |
+          echo "Listing snapshot directories (for debugging)..."
+          find . -type d -name "*.feature.spec.js-snapshots" -print -exec ls -la {} \; || true
+          echo "Listing png snapshot files..."
+          find . -type f -name "*.png" -print || true
+          echo "Listing test-results directory..."
+          ls -la test-results || true
+
+      - name: Upload snapshots and test-results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-artifacts
+          path: |
+            .features-gen/**/*.feature.spec.js-snapshots/**
+            .features-gen/**/*.png
+            test-results/**
+          retention-days: 7
 
       - name: Upload Playwright report
         if: always()
