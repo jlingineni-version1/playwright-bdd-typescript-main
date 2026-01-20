@@ -25,6 +25,8 @@ export default defineConfig({
   expect: {
     timeout: 10000,
   },
+  snapshotPathTemplate:
+    '{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{ext}',
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -42,7 +44,10 @@ export default defineConfig({
     trace: 'on',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    viewport: { width: 1920, height: 1080 },
+    deviceScaleFactor: 1,
   },
+
 
   /* Configure projects for major bro wsers */
   projects: [
