@@ -60,7 +60,7 @@ jobs:
       - name: Run Playwright BDD tests
         env:
           TEST_ENV: test
-        run: npx playwright test
+        run: npm test
 
       - name: List produced snapshot and test results
         if: always()
