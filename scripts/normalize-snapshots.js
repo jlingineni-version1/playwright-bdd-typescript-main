@@ -13,6 +13,11 @@ const KNOWN_TOKENS = [
   'darwin',
   'mac',
   'macos',
+  // Playwright attachment role tokens
+  'actual',
+  'expected',
+  'diff',
+  'previous',
 ];
 
 function canonicalName(filename) {
@@ -34,16 +39,25 @@ async function walk(dir, cb) {
 }
 
 async function main() {
-  const searchRoot = path.join(ROOT, '.features-gen');
-  try {
-    await fs.access(searchRoot);
-  } catch (e) {
-    console.error('No .features-gen folder found. Run the generator first: npm run bdd:generate');
+  const roots = [path.join(ROOT, '.features-gen'), path.join(ROOT, 'test-results')];
+  const existingRoots = [];
+  for (const r of roots) {
+    try {
+      await fs.access(r);
+      existingRoots.push(r);
+    } catch (e) {
+      // skip missing roots
+    }
+  }
+
+  if (existingRoots.length === 0) {
+    console.error('No `.features-gen` or `test-results` folders found. Run the generator/tests first.');
     process.exit(1);
   }
 
   const renamed = [];
-  await walk(searchRoot, async (file) => {
+  for (const searchRoot of existingRoots) {
+    await walk(searchRoot, async (file) => {
     if (!file.toLowerCase().endsWith('.png')) return;
     const dir = path.dirname(file);
     const oldName = path.basename(file);
@@ -60,6 +74,7 @@ async function main() {
       console.log('Renamed:', file, '->', target);
     }
   });
+  }
 
   if (renamed.length === 0) {
     console.log('No snapshot files renamed.');

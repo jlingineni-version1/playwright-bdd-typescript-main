@@ -9,6 +9,7 @@
     "bdd:test:headed": "npm run bdd:generate && npx playwright test .features-gen --headed",
     "bdd:test:trace": "npm run bdd:generate && npx playwright test .features-gen --trace on",
     "bdd:show-report": "npx playwright show-report",
+    "bdd:normalize": "node scripts/normalize-snapshots.js",
     "bdd:test:home": "npm run bdd:generate && npx playwright test .features-gen --grep @home",
     "bdd:test:footer": "npm run bdd:generate && npx playwright test .features-gen --grep @footer",
     "bdd:test:canvasscreenshot": "npm run bdd:generate && npx playwright test .features-gen --grep @canvasscreenshot",
