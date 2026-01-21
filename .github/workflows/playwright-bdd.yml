@@ -57,6 +57,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      - name: Generate Linux snapshots (one-time)
+        run: npx playwright test --update-snapshots
+
       - name: Run Playwright BDD tests
         env:
           TEST_ENV: test
