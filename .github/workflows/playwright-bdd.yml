@@ -4,7 +4,6 @@ on:
   schedule:
     - cron: '0 6 * * *'   # Daily at 6 AM UTC
   workflow_dispatch:
-
   push:
     branches:
       - "**"
@@ -17,34 +16,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # -----------------------------
+      # Checkout
+      # -----------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-         # Step to debug repository contents and verify snapshot folders
       - name: Show current branch and commit
         run: |
           echo "Branch: $GITHUB_REF"
           echo "Commit: $GITHUB_SHA"
 
-      - name: List repository files
-        run: |
-          ls -R
-
-      - name: Verify snapshot folder exists
-        run: |
-          echo "Verifying connectivityToolMap snapshot folder..."
-          ls -R .features-gen/tests/features/connectivityToolMap.feature.spec.js-snapshots/
-    
-          echo "Verifying home feature snapshot folder..."
-          if [ -d ".features-gen/tests/features/home.feature.spec.js-snapshots/" ]; then
-            ls -R .features-gen/tests/features/home.feature.spec.js-snapshots/
-          else
-            echo "Warning: home.feature.spec.js-snapshots/ directory not found."
-          fi
-
-          echo "Finding snapshot files..."
-          find . -type f -name "*.png"
-
+      # -----------------------------
+      # Node setup
+      # -----------------------------
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -57,24 +42,62 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      # -----------------------------
+      # CRITICAL: Clean old artifacts
+      # -----------------------------
+      - name: Clean .features-gen and old snapshots
+        run: |
+          echo "Cleaning generated features and snapshots"
+          rm -rf .features-gen
+          find . -name "*.png" -delete
+          rm -rf test-results playwright-report
+
+      # -----------------------------
+      # Generate BDD tests
+      # -----------------------------
+      - name: Generate BDD tests
+        run: npm run bdd:generate
+
+      # -----------------------------
+      # ONE-TIME STEP (REMOVE AFTER SNAPSHOTS ARE COMMITTED)
+      # -----------------------------
       - name: Generate Linux snapshots (one-time)
         run: npx playwright test --update-snapshots
 
+      # -----------------------------
+      # Validate PNG snapshots (guards against corruption)
+      # -----------------------------
+      - name: Validate snapshot PNG headers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y file
+          echo "Validating PNG snapshots..."
+          find .features-gen -name "*.png" -exec file {} \;
+
+      # -----------------------------
+      # Run Playwright BDD tests
+      # -----------------------------
       - name: Run Playwright BDD tests
         env:
           TEST_ENV: test
         run: npm test
 
+      # -----------------------------
+      # Debug output (always runs)
+      # -----------------------------
       - name: List produced snapshot and test results
         if: always()
         run: |
-          echo "Listing snapshot directories (for debugging)..."
-          find . -type d -name "*.feature.spec.js-snapshots" -print -exec ls -la {} \; || true
-          echo "Listing png snapshot files..."
-          find . -type f -name "*.png" -print || true
-          echo "Listing test-results directory..."
+          echo "Snapshot directories:"
+          find .features-gen -type d -name "*.feature.spec.js-snapshots" -print -exec ls -la {} \; || true
+          echo "PNG snapshot files:"
+          find .features-gen -type f -name "*.png" -print || true
+          echo "Test results:"
           ls -la test-results || true
 
+      # -----------------------------
+      # Upload artifacts
+      # -----------------------------
       - name: Upload snapshots and test-results
         if: always()
         uses: actions/upload-artifact@v4
@@ -93,5 +116,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
-
-          

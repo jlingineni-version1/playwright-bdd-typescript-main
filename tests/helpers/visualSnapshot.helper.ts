@@ -48,8 +48,9 @@ export class VisualSnapshotHelper {
     const canonical = canonicalizeSnapshotName(snapshotName);
     // Pre-validate expected snapshot file is a PNG when present to give clearer CI errors
     try {
-      const expectedPath = await findExpectedSnapshotPath(canonical);
-      if (expectedPath) {
+      const lookup = await findExpectedSnapshotPath(canonical);
+      if (lookup.foundPath) {
+        const expectedPath = lookup.foundPath;
         const fd = await fsp.open(expectedPath, 'r');
         const buf = Buffer.alloc(8);
         await fd.read(buf, 0, 8, 0);
@@ -58,6 +59,10 @@ export class VisualSnapshotHelper {
         if (!buf.equals(pngSig)) {
           throw new Error(`Expected snapshot file ${expectedPath} is not a valid PNG (magic: ${buf.toString('hex')}). Check .features-gen generation / normalize step.`);
         }
+      } else if (lookup.candidates && lookup.candidates.length > 0) {
+        // No valid PNG found; prepare a helpful error listing candidates and their signatures
+        const lines = lookup.candidates.map(c => `- ${c.path} (magic: ${c.magic}, sample: ${c.sampleText})`);
+        throw new Error(`No valid PNG snapshot found for ${canonical}. Candidates found but none were valid PNGs:\n${lines.join('\n')}\nCheck .features-gen generation / normalize step.`);
       }
     } catch (err) {
       // If we hit an IO error or the pre-check failed, rethrow with context so CI logs are helpful
@@ -76,8 +81,9 @@ export class VisualSnapshotHelper {
     const canonical = canonicalizeSnapshotName(snapshotName);
     // See compareScreenshot for validation
     try {
-      const expectedPath = await findExpectedSnapshotPath(canonical);
-      if (expectedPath) {
+      const lookup = await findExpectedSnapshotPath(canonical);
+      if (lookup.foundPath) {
+        const expectedPath = lookup.foundPath;
         const fd = await fsp.open(expectedPath, 'r');
         const buf = Buffer.alloc(8);
         await fd.read(buf, 0, 8, 0);
@@ -86,6 +92,9 @@ export class VisualSnapshotHelper {
         if (!buf.equals(pngSig)) {
           throw new Error(`Expected snapshot file ${expectedPath} is not a valid PNG (magic: ${buf.toString('hex')}). Check .features-gen generation / normalize step.`);
         }
+      } else if (lookup.candidates && lookup.candidates.length > 0) {
+        const lines = lookup.candidates.map(c => `- ${c.path} (magic: ${c.magic}, sample: ${c.sampleText})`);
+        throw new Error(`No valid PNG snapshot found for ${canonical}. Candidates found but none were valid PNGs:\n${lines.join('\n')}\nCheck .features-gen generation / normalize step.`);
       }
     } catch (err) {
       if (err instanceof Error) throw err;
@@ -95,36 +104,49 @@ export class VisualSnapshotHelper {
   }
 }
 
-async function findExpectedSnapshotPath(canonicalName: string) {
+type Candidate = { path: string; magic: string; sampleText: string };
+
+async function findExpectedSnapshotPath(canonicalName: string): Promise<{ foundPath?: string | null; candidates: Candidate[] }> {
   const roots = [path.resolve(process.cwd(), '.features-gen'), path.resolve(process.cwd(), 'test-results')];
   const target = canonicalName;
-  async function walk(dir: string): Promise<string | null> {
-    let entries: fs.Dirent[];
-    try {
-      entries = await fsp.readdir(dir, { withFileTypes: true });
-    } catch (e) {
-      return null;
-    }
-    for (const entry of entries) {
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        const found = await walk(full);
-        if (found) return found;
-      } else if (entry.isFile() && entry.name === target) {
-        return full;
-      }
-    }
-    return null;
-  }
+  const base = canonicalName.replace(/\.png$/i, '');
+  const candidates: Candidate[] = [];
 
   for (const r of roots) {
-    try {
-      await fsp.access(r);
-    } catch (e) {
-      continue;
+    try { await fsp.access(r); } catch { continue; }
+    // Walk tree and collect/check candidates; return early if a valid PNG is found
+    let foundPath: string | undefined;
+    async function inner(dir: string) {
+      let entries: fs.Dirent[];
+      try { entries = await fsp.readdir(dir, { withFileTypes: true }); } catch { return; }
+      for (const entry of entries) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          await inner(full);
+          if (foundPath) return;
+        } else if (entry.isFile()) {
+          const name = entry.name;
+          if (name === target || (name.toLowerCase().endsWith('.png') && name.toLowerCase().includes(base.toLowerCase()))) {
+            try {
+              const fd = await fsp.open(full, 'r');
+              const buf = Buffer.alloc(8);
+              await fd.read(buf, 0, 8, 0);
+              await fd.close();
+              const magic = buf.toString('hex');
+              const pngSig = '89504e470d0a1a0a';
+              if (magic === pngSig) { foundPath = full; return; }
+              let sample = '';
+              try { sample = (await fsp.readFile(full, 'utf8')).slice(0, 200).replace(/\s+/g, ' '); } catch { sample = '<binary or unreadable>'; }
+              candidates.push({ path: full, magic, sampleText: sample });
+            } catch {
+              candidates.push({ path: full, magic: '<io-error>', sampleText: '' });
+            }
+          }
+        }
+      }
     }
-    const found = await walk(r);
-    if (found) return found;
+    await inner(r);
+    if (foundPath) return { foundPath, candidates };
   }
-  return null;
+  return { foundPath: null, candidates };
 }
