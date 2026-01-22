@@ -96,7 +96,6 @@ When('I click on understand the data link and validate the understand the data p
   await navigationHelper.clickBackLink();
 });
 
-
 When('I click on feedback link and validate the feedback page is submitted successfully', async ({ homePage, page, context }) => {
   const newPage = await homePage.clickFeedbackLink();
   feedbackPage = new FeedbackPage(newPage);
