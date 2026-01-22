@@ -25,6 +25,8 @@ export class HomePage {
     readonly connectivityToolPage;
     readonly openGovernentLicenceLink;
     readonly openGovernmentPageTitle;
+    readonly crownCopyRightLink;
+    readonly crownCopyRightPageTitle;
 
 
     constructor(private page: Page) {
@@ -50,6 +52,8 @@ export class HomePage {
         this.connectivityToolPage = page.locator('.govuk-template__body.js-enabled.govuk-frontend-supported');
         this.openGovernentLicenceLink = page.getByRole('link', { name: 'Open Government Licence v3.0' });
         this.openGovernmentPageTitle = page.getByRole('img', { name: 'Open Government Licence for' });
+        this.crownCopyRightLink = page.getByRole('link', { name: '© Crown copyright' });
+        this.crownCopyRightPageTitle = page.getByRole('heading', { name: 'Crown copyright' });
     }
 
     async titlesVisible() {
@@ -59,6 +63,14 @@ export class HomePage {
         await expect(this.ministryOfHousingTitle).toBeVisible();
         await expect(this.departmentForTransportTitle).toBeVisible();
 
+    }
+
+    async clickCrownCopyRightLink() {
+        await this.crownCopyRightLink.click();
+    }
+
+    async validateCrownCopyRightPageTitle() {
+        await expect(this.crownCopyRightPageTitle).toBeVisible();
     }
 
     async clickOnNavGuidanceLink() {

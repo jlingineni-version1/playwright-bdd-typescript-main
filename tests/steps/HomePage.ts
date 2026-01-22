@@ -52,6 +52,12 @@ When('I click the on Open Government Licence check and validate the Open Governm
   await homePage.navigate();
 });
 
+When('I click the on Crown copyright check and validate the Crown copyright page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickCrownCopyRightLink();
+  await homePage.validateCrownCopyRightPageTitle();
+  await homePage.navigate();
+});
+
 Then('navigate back to home page', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });

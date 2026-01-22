@@ -18,6 +18,11 @@ Feature: Home Page Login Functionality
     When I click the on Open Government Licence check and validate the Open Government Licence page is displayed successfully
     Then navigate back to home page
 
+  @home @regression
+  Scenario:Home page Crown copyright
+    When I click the on Crown copyright check and validate the Crown copyright page is displayed successfully
+    Then navigate back to home page
+    
   @footer @regression
   Scenario:Home page accessibility check
     When I click the on accessibility check and validate the accessibility statement page is displayed successfully
