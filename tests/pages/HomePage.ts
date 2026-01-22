@@ -23,6 +23,8 @@ export class HomePage {
     readonly exploreTheMapTitle;
     readonly guidanceHeaderLink;
     readonly connectivityToolPage;
+    readonly openGovernentLicenceLink;
+    readonly openGovernmentPageTitle;
 
 
     constructor(private page: Page) {
@@ -46,6 +48,8 @@ export class HomePage {
         this.exploreTheMapTitle = page.getByRole('heading', { name: 'Explore the map' });
         this.guidanceHeaderLink = page.getByRole('navigation').getByRole('link', { name: 'Guidance' });
         this.connectivityToolPage = page.locator('.govuk-template__body.js-enabled.govuk-frontend-supported');
+        this.openGovernentLicenceLink = page.getByRole('link', { name: 'Open Government Licence v3.0' });
+        this.openGovernmentPageTitle = page.getByRole('img', { name: 'Open Government Licence for' });
     }
 
     async titlesVisible() {
@@ -61,6 +65,14 @@ export class HomePage {
         await this.guidanceHeaderLink.click();
     }
 
+    async clickOpenGovernmentLicenceLink() {
+        await this.openGovernentLicenceLink.click();
+    }
+
+    async verifyOpenGovernmentPageTitle() {
+        await expect(this.openGovernmentPageTitle).toBeVisible();
+    }
+
 
     async navigate() {
         await this.page.goto(BASE_URL);
@@ -70,7 +82,7 @@ export class HomePage {
     async takeConnectivityToolFullPageScreenshot(): Promise<Buffer> {
         await this.page.setViewportSize({ width: 1920, height: 1080 });
         await this.page.waitForLoadState('networkidle');
-        return await this.page.screenshot({fullPage: true });
+        return await this.page.screenshot({ fullPage: true });
     }
 
     async navigateToConnectivityToolMap() {

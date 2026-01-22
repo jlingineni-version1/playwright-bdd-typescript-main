@@ -46,6 +46,12 @@ When('I click the on accessibility check and validate the accessibility statemen
   await navigationHelper.clickBackLink();
 });
 
+When('I click the on Open Government Licence check and validate the Open Government Licence page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickOpenGovernmentLicenceLink();
+  await homePage.verifyOpenGovernmentPageTitle();
+  await homePage.navigate();
+});
+
 Then('navigate back to home page', async ({ homePage }) => {
   await expect(homePage.pageTitle).toBeVisible();
 });
