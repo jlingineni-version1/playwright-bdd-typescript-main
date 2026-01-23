@@ -28,7 +28,6 @@ export class HomePage {
     readonly crownCopyRightLink;
     readonly crownCopyRightPageTitle;
 
-
     constructor(private page: Page) {
         this.pageTitle = this.page.getByRole('heading', { name: 'Discover connectivity in your local area' });
         this.exploreConnectivityToolLink = this.page.getByRole('link', { name: 'Explore the Connectivity Tool' });
