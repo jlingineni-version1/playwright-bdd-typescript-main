@@ -93,6 +93,11 @@ Feature: Connectivity Tool Map Navigation
     When I click on Map Tiler link on the connectivity tool map page
     Then I should be redirected to Map Tiler screen and navigate back to connectivity tool map page
 
+  @GOVUK @regression @smoke
+  Scenario: Verify GOV.UK link is redirected to expected screen and navigate back to connectivity tool map page
+    When I click on GOV.UK link on the connectivity tool map page
+    Then I should be redirected to GOV.UK screen and navigate back to connectivity tool map page
+
   @openStreetMapContributors @regression @smoke
   Scenario: Verify Open Street Map Contributors link is redirected to expected screen and navigate back to connectivity tool map page
     When I click on Open Street Map Contributors link on the connectivity tool map page
