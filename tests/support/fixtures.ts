@@ -7,7 +7,7 @@ import { MapTilePage } from '../pages/MapTilerPage';
 import { OpenStreetMapPage } from '../pages/OpenStreetMapPage';
 import { NavigationHelper } from '../helpers/navigatorHelper';
 import { MapHelper } from '../helpers/map.helper';
-
+import { GOVUKPage } from '../pages/GOVUKPage';
 
 type Fixtures = {
   homePage: HomePage;
@@ -17,7 +17,8 @@ type Fixtures = {
   mapTilePage: MapTilePage;
   openStreetMapPage: OpenStreetMapPage;
   navigationHelper: NavigationHelper;
-  mapHelper:MapHelper;
+  mapHelper: MapHelper;
+  govukPage: GOVUKPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -45,9 +46,15 @@ export const test = base.extend<Fixtures>({
     const mapTilePage = new MapTilePage(page);
     await use(mapTilePage);
   },
+
   openStreetMapPage: async ({ page }, use) => {
     const openStreetMapPage = new OpenStreetMapPage(page);
     await use(openStreetMapPage);
+  },
+
+  govukPage: async ({ page }, use) => {
+    const govukPage = new GOVUKPage(page);
+    await use(govukPage);
   },
 
   navigationHelper: async ({ page }, use) => {
@@ -55,7 +62,7 @@ export const test = base.extend<Fixtures>({
     await use(navigationHelper);
   },
 
-   mapHelper: async ({ page }, use) => {
+  mapHelper: async ({ page }, use) => {
     const mapHelper = new MapHelper(page);
     await use(mapHelper);
   },

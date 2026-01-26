@@ -4,6 +4,7 @@ import { expect } from '@playwright/test';
 import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
 import { MapTilePage } from '../pages/MapTilerPage';
 import { OpenStreetMapPage } from '../pages/OpenStreetMapPage';
+import { GOVUKPage } from '../pages/GOVUKPage';
 
 const { Given, When, Then } = createBdd(test);
 
@@ -176,6 +177,23 @@ Then('I should be redirected to Map Tiler screen and navigate back to connectivi
   mapTilePage = new MapTilePage(page);
   await mapTilePage.verifyMapTilerHeading();
   await mapTilePage.closeTab();
+  await page.bringToFront();
+  await connectivityToolPage.verifyFilterMapHeader();
+});
+
+When('I click on GOV.UK link on the connectivity tool map page', async ({ connectivityToolPage }) => {
+  // Capture the popup returned by the page object so we can operate on it directly
+  (connectivityToolPage as any)._lastPopup = await connectivityToolPage.clickGovUKLink();
+});
+
+Then('I should be redirected to GOV.UK screen and navigate back to connectivity tool map page', async ({ connectivityToolPage, page }) => {
+  // Use the popup page returned earlier by the connectivityToolPage
+  const govPopup = (connectivityToolPage as any)._lastPopup;
+  if (!govPopup) throw new Error('GOV.UK popup was not captured');
+  const govUKPage = new GOVUKPage(govPopup);
+  await govUKPage.verifyGovUKHeading();
+  await govUKPage.closeTab();
+  // bring the main test page to front and verify the app is visible again
   await page.bringToFront();
   await connectivityToolPage.verifyFilterMapHeader();
 });
