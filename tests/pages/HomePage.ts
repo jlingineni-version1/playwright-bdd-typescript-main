@@ -23,7 +23,10 @@ export class HomePage {
     readonly exploreTheMapTitle;
     readonly guidanceHeaderLink;
     readonly connectivityToolPage;
-
+    readonly openGovernentLicenceLink;
+    readonly openGovernmentPageTitle;
+    readonly crownCopyRightLink;
+    readonly crownCopyRightPageTitle;
 
     constructor(private page: Page) {
         this.pageTitle = this.page.getByRole('heading', { name: 'Discover connectivity in your local area' });
@@ -46,6 +49,10 @@ export class HomePage {
         this.exploreTheMapTitle = page.getByRole('heading', { name: 'Explore the map' });
         this.guidanceHeaderLink = page.getByRole('navigation').getByRole('link', { name: 'Guidance' });
         this.connectivityToolPage = page.locator('.govuk-template__body.js-enabled.govuk-frontend-supported');
+        this.openGovernentLicenceLink = page.getByRole('link', { name: 'Open Government Licence v3.0' });
+        this.openGovernmentPageTitle = page.getByRole('img', { name: 'Open Government Licence for' });
+        this.crownCopyRightLink = page.getByRole('link', { name: '© Crown copyright' });
+        this.crownCopyRightPageTitle = page.getByRole('heading', { name: 'Crown copyright' });
     }
 
     async titlesVisible() {
@@ -57,8 +64,24 @@ export class HomePage {
 
     }
 
+    async clickCrownCopyRightLink() {
+        await this.crownCopyRightLink.click();
+    }
+
+    async validateCrownCopyRightPageTitle() {
+        await expect(this.crownCopyRightPageTitle).toBeVisible();
+    }
+
     async clickOnNavGuidanceLink() {
         await this.guidanceHeaderLink.click();
+    }
+
+    async clickOpenGovernmentLicenceLink() {
+        await this.openGovernentLicenceLink.click();
+    }
+
+    async verifyOpenGovernmentPageTitle() {
+        await expect(this.openGovernmentPageTitle).toBeVisible();
     }
 
 
@@ -67,10 +90,10 @@ export class HomePage {
     }
 
     // Method to take screenshot of the canvas element
-    async takeConnectivityToolFullPageScreenshot(filePath: string): Promise<Buffer> {
+    async takeConnectivityToolFullPageScreenshot(): Promise<Buffer> {
         await this.page.setViewportSize({ width: 1920, height: 1080 });
         await this.page.waitForLoadState('networkidle');
-        return await this.page.screenshot({ path: filePath, fullPage: true });
+        return await this.page.screenshot({ fullPage: true });
     }
 
     async navigateToConnectivityToolMap() {

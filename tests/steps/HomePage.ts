@@ -28,8 +28,8 @@ When('I click explore connectivity tool link and take connectivity full page scr
   await homePage.clickConnectivityToolLink();
   await expect(page).toHaveURL(APP_URL);
   await mapHelper.waitForMapToLoad();
-  const screenshot = await homePage.takeConnectivityToolFullPageScreenshot('tests/screenshots/connectivitytool.png');
-  await VisualSnapshotHelper.connectivityToolFullPageScreenshot(screenshot, 'tests/screenshots/connectivitytool.png');
+  const screenshot = await homePage.takeConnectivityToolFullPageScreenshot();
+  await VisualSnapshotHelper.connectivityToolFullPageScreenshot(screenshot, '-fullscreen-connectivity.png');
 });
 
 Then('I should navigate to map successfully', async ({ page }) => {
@@ -44,6 +44,18 @@ When('I click the on accessibility check and validate the accessibility statemen
   await homePage.clickAccessibilityLink();
   await homePage.verifyAccessibilityPage();
   await navigationHelper.clickBackLink();
+});
+
+When('I click the on Open Government Licence check and validate the Open Government Licence page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickOpenGovernmentLicenceLink();
+  await homePage.verifyOpenGovernmentPageTitle();
+  await homePage.navigate();
+});
+
+When('I click the on Crown copyright check and validate the Crown copyright page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickCrownCopyRightLink();
+  await homePage.validateCrownCopyRightPageTitle();
+  await homePage.navigate();
 });
 
 Then('navigate back to home page', async ({ homePage }) => {
@@ -83,7 +95,6 @@ When('I click on understand the data link and validate the understand the data p
   await homePage.verifyUnderstandDataPageURL();
   await navigationHelper.clickBackLink();
 });
-
 
 When('I click on feedback link and validate the feedback page is submitted successfully', async ({ homePage, page, context }) => {
   const newPage = await homePage.clickFeedbackLink();

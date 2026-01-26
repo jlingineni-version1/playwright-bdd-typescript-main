@@ -1,5 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { PopupHelper } from '../helpers/popUpHelper';
+import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
 
 export class ConnectivityToolPage {
     private showButton;
@@ -169,7 +170,8 @@ export class ConnectivityToolPage {
     }
 
     async verifyVisualRegessionOfMap(filename: string) {
-        expect(await this.page.screenshot()).toMatchSnapshot('connectivity-tool-map-chromium-win32-chromium-win32.png');
+        const screenshot = await this.page.screenshot();
+        await VisualSnapshotHelper.compareScreenshot(screenshot, filename || 'connectivity-tool-map');
     }
 
     async takeScreenshot(): Promise<Buffer> {

@@ -4,22 +4,32 @@ on:
   schedule:
     - cron: '0 6 * * *'   # Daily at 6 AM UTC
   workflow_dispatch:
-
   push:
     branches:
-      - feature/connectivitytool
+      - "**"
   pull_request:
     branches:
-      - feature/connectivitytool
+      - "**"
 
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
 
     steps:
+      # -----------------------------
+      # Checkout
+      # -----------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Show current branch and commit
+        run: |
+          echo "Branch: $GITHUB_REF"
+          echo "Commit: $GITHUB_SHA"
+
+      # -----------------------------
+      # Node setup
+      # -----------------------------
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,11 +42,72 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      # -----------------------------
+      # CRITICAL: Clean old artifacts
+      # -----------------------------
+      - name: Clean .features-gen and old snapshots
+        run: |
+          echo "Cleaning generated features and snapshots"
+          rm -rf .features-gen
+          find . -name "*.png" -delete
+          rm -rf test-results playwright-report
+
+      # -----------------------------
+      # Generate BDD tests
+      # -----------------------------
+      - name: Generate BDD tests
+        run: npm run bdd:generate
+
+      # -----------------------------
+      # ONE-TIME STEP (REMOVE AFTER SNAPSHOTS ARE COMMITTED)
+      # -----------------------------
+      - name: Generate Linux snapshots (one-time)
+        run: npx playwright test --update-snapshots
+
+      # -----------------------------
+      # Validate PNG snapshots (guards against corruption)
+      # -----------------------------
+      - name: Validate snapshot PNG headers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y file
+          echo "Validating PNG snapshots..."
+          find .features-gen -name "*.png" -exec file {} \;
+
+      # -----------------------------
+      # Run Playwright BDD tests
+      # -----------------------------
       - name: Run Playwright BDD tests
         env:
           TEST_ENV: test
-        run: npm run test
-        continue-on-error: true
+        run: npm test
+
+      # -----------------------------
+      # Debug output (always runs)
+      # -----------------------------
+      - name: List produced snapshot and test results
+        if: always()
+        run: |
+          echo "Snapshot directories:"
+          find .features-gen -type d -name "*.feature.spec.js-snapshots" -print -exec ls -la {} \; || true
+          echo "PNG snapshot files:"
+          find .features-gen -type f -name "*.png" -print || true
+          echo "Test results:"
+          ls -la test-results || true
+
+      # -----------------------------
+      # Upload artifacts
+      # -----------------------------
+      - name: Upload snapshots and test-results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-artifacts
+          path: |
+            .features-gen/**/*.feature.spec.js-snapshots/**
+            .features-gen/**/*.png
+            test-results/**
+          retention-days: 7
 
       - name: Upload Playwright report
         if: always()
@@ -45,5 +116,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
-
-          
