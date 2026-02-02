@@ -37,7 +37,7 @@ export class HomePage {
         this.privatePolicyLink = this.page.getByRole('link', { name: 'Privacy policy' });
         this.privacyPolicyHeading = this.page.getByRole('heading', { name: 'Privacy policy' });
         this.guidanceLink = this.page.getByRole('contentinfo').getByRole('link', { name: 'Guidance' });
-        this.guidanceHeading = this.page.getByRole('heading', { name: 'Connectivity Tool Lite User' });
+        this.guidanceHeading = this.page.getByRole('heading', { name: 'Connectivity Tool User Manual' })
         this.guidanceClickableLink = this.page.getByRole('navigation').getByRole('link', { name: 'Guidance' });
         this.understandDataLink = this.page.getByRole('link', { name: 'Understand the data' });
         this.understandDataHeading = this.page.getByRole('heading', { name: 'Understand The Data' });
