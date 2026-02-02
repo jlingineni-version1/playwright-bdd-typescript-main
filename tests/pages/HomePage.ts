@@ -27,6 +27,16 @@ export class HomePage {
     readonly openGovernmentPageTitle;
     readonly crownCopyRightLink;
     readonly crownCopyRightPageTitle;
+    readonly readUserManualLink;
+    readonly userManualHeading;
+    readonly applyingTheConnectivityLink;
+    readonly applyingTheConnectivityHeading;
+    readonly interpretingConnectivityLink;
+    readonly interpretingConnectivityHeading;
+    readonly findOutMoreLink;
+    readonly findOutMoreHeading;
+    readonly transportConnectivityMetricLink;
+    readonly transportConnectivityMetricHeading;
 
     constructor(private page: Page) {
         this.pageTitle = this.page.getByRole('heading', { name: 'Discover connectivity in your local area' });
@@ -53,6 +63,16 @@ export class HomePage {
         this.openGovernmentPageTitle = page.getByRole('img', { name: 'Open Government Licence for' });
         this.crownCopyRightLink = page.getByRole('link', { name: '© Crown copyright' });
         this.crownCopyRightPageTitle = page.getByRole('heading', { name: 'Crown copyright' });
+        this.readUserManualLink = page.getByRole('link', { name: 'Read user manual' });
+        this.userManualHeading = page.getByRole('heading', { name: 'Connectivity Tool User Manual' });
+        this.applyingTheConnectivityLink = page.getByRole('link', { name: 'Applying the Connectivity Tool' });
+        this.applyingTheConnectivityHeading = page.getByRole('heading', { name: 'Applying Connectivity Tool' });
+        this.interpretingConnectivityLink = page.getByRole('link', { name: 'Interpreting connectivity' });
+        this.interpretingConnectivityHeading = page.getByRole('heading', { name: 'Interpreting Connectivity' });
+        this.findOutMoreLink = page.getByRole('link', { name: 'Find out more' });
+        this.findOutMoreHeading = page.getByRole('heading', { name: 'Understand The Data' });
+        this.transportConnectivityMetricLink = page.getByRole('link', { name: 'Transport connectivity metric' });
+        this.transportConnectivityMetricHeading = page.locator('h1');
     }
 
     async titlesVisible() {
@@ -61,8 +81,33 @@ export class HomePage {
         await expect(this.activeTravelEnglandTitle).toBeVisible();
         await expect(this.ministryOfHousingTitle).toBeVisible();
         await expect(this.departmentForTransportTitle).toBeVisible();
-
     }
+
+    async clickTransportConnectivityMetricLink() {  
+        await this.transportConnectivityMetricLink.click();
+        await expect(this.transportConnectivityMetricHeading).toBeVisible();
+    }
+
+    async clickFindOutMoreLink() {
+        await this.findOutMoreLink.click();
+        await expect(this.findOutMoreHeading).toBeVisible();
+    }
+
+    async clickInterpretingConnectivityLink() {
+        await this.interpretingConnectivityLink.click();
+        await expect(this.interpretingConnectivityHeading).toBeVisible();
+    }
+
+    async clickReadUserManualLink() {
+        await this.readUserManualLink.click();
+        await expect(this.userManualHeading).toBeVisible();
+    }
+
+    async clickApplyingTheConnectivityLink() {
+        await this.applyingTheConnectivityLink.click();
+        await expect(this.applyingTheConnectivityHeading).toBeVisible();
+    }
+
 
     async clickCrownCopyRightLink() {
         await this.crownCopyRightLink.click();

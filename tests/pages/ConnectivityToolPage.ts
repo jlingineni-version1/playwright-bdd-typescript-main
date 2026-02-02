@@ -1,6 +1,7 @@
 import { Page, expect } from '@playwright/test';
 import { PopupHelper } from '../helpers/popUpHelper';
 import { VisualSnapshotHelper } from '../helpers/visualSnapshot.helper';
+import { MAP_URL } from '../config/env';
 
 export class ConnectivityToolPage {
     private showButton;
@@ -84,7 +85,7 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToReload() {
-        await this.page.waitForTimeout(60000); // Simple wait, can be replaced with more robust logic
+        await this.page.waitForTimeout(23000); // Simple wait, can be replaced with more robust logic
     }
 
     async selectLocalAuthorityView() {
@@ -193,7 +194,8 @@ export class ConnectivityToolPage {
     }
 
     async navigateToMap() {
-        await this.page.goto('https://connectivity-tool-lite-dev.dft.gov.uk/app#14/52.4948/-1.88139');
+        // await this.page.goto('https://connectivity-tool-lite-dev.dft.gov.uk/app#14/52.4948/-1.88139');
+        await this.page.goto(MAP_URL);
     }
 
     async searchLocation(location: string) {
