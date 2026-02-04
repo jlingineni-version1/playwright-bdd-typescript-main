@@ -22,7 +22,32 @@ Feature: Home Page Login Functionality
   Scenario:Home page Crown copyright
     When I click the on Crown copyright check and validate the Crown copyright page is displayed successfully
     Then navigate back to home page
-    
+
+  @home @regression
+  Scenario:Home pageRead user manual link check
+    When I click on read user manual link and validate the user manual page is displayed successfully
+    Then navigate back to home page
+
+  @home @regression
+  Scenario:Home page Applying connectivity tool link check
+    When I click on applying connectivity tool link and validate the applying connectivity tool page is displayed successfully
+    Then navigate back to home page 
+
+  @home @regression
+  Scenario:Home page Interpreting connectivity scores link check
+    When I click on interpreting connectivity scores link and validate the interpreting connectivity scores page is displayed successfully
+    Then navigate back to home page 
+  
+  @home @regression
+  Scenario:Home page Find out more link check
+    When I click on find out more link and validate the find out more page is displayed successfully
+    Then navigate back to home page 
+  
+  @home @regression
+  Scenario:Home page Transport connectivity metrics link check
+    When I click on transport connectivity metrics link and validate the transport connectivity metrics page is displayed successfully
+    Then navigate back to home page
+
   @footer @regression
   Scenario:Home page accessibility check
     When I click the on accessibility check and validate the accessibility statement page is displayed successfully

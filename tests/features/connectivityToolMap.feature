@@ -2,6 +2,11 @@ Feature: Connectivity Tool Map Navigation
 
   Background: Filter map functionality test
     Given I am on the home page & I navigate to the connectivity tool map
+  
+  @home @regression
+  Scenario: Refresh connectivity tool map page and verify all elements are loaded correctly
+    When I refresh the connectivity tool map page
+    Then I should see map loaded correctly
 
   @filrermap
   Scenario: Filter map test to validate expected results for local authority , destination and mode of transport filters

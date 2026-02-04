@@ -24,6 +24,26 @@ When('I click the explore connectivity tool link', async ({ homePage }) => {
   await homePage.clickConnectivityToolLink();
 });
 
+When('I click on applying connectivity tool link and validate the applying connectivity tool page is displayed successfully', async ({ homePage, navigationHelper }) => {
+  await homePage.clickApplyingTheConnectivityLink();
+  await navigationHelper.clickBackLink();
+});
+
+When('I click on interpreting connectivity scores link and validate the interpreting connectivity scores page is displayed successfully', async ({ homePage, navigationHelper }) => {
+  await homePage.clickInterpretingConnectivityLink();
+  await navigationHelper.clickBackLink();
+});
+
+When('I click on find out more link and validate the find out more page is displayed successfully', async ({ homePage, navigationHelper }) => {
+  await homePage.clickFindOutMoreLink();
+  await navigationHelper.clickBackLink();
+});
+
+When('I click on transport connectivity metrics link and validate the transport connectivity metrics page is displayed successfully', async ({ homePage}) => {
+  await homePage.clickTransportConnectivityMetricLink();
+  await homePage.navigate();
+});
+
 When('I click explore connectivity tool link and take connectivity full page screenshot', async ({ homePage, page, mapHelper }) => {
   await homePage.clickConnectivityToolLink();
   await expect(page).toHaveURL(APP_URL);
@@ -43,6 +63,11 @@ Then('I should successfully capture a full-page screenshot of the connectivity m
 When('I click the on accessibility check and validate the accessibility statement page is displayed successfully', async ({ homePage, navigationHelper }) => {
   await homePage.clickAccessibilityLink();
   await homePage.verifyAccessibilityPage();
+  await navigationHelper.clickBackLink();
+});
+
+When('I click on read user manual link and validate the user manual page is displayed successfully', async ({ homePage, navigationHelper }) => {
+  await homePage.clickReadUserManualLink();
   await navigationHelper.clickBackLink();
 });
 
