@@ -49,7 +49,7 @@ export class ConnectivityToolPage {
         this.showPublicTrasportHeading = page.getByRole('heading', { name: 'Show public transport stops' });
         this.govUKLink = this.page.locator('a:has(img[alt="GOV.UK"])');
     }
-    
+
     async clickGovUKLink() {
         return await PopupHelper.clickAndWaitForPopup(
             this.page,
@@ -84,8 +84,13 @@ export class ConnectivityToolPage {
         });
     }
 
+    async refreshPage() {
+       await this.waitForMapToReload();
+       await this.page.reload();
+    }
+
     async waitForMapToReload() {
-        await this.page.waitForTimeout(23000); // Simple wait, can be replaced with more robust logic
+        await this.page.waitForTimeout(18000); // Simple wait, can be replaced with more robust logic
     }
 
     async selectLocalAuthorityView() {
