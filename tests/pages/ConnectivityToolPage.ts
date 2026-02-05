@@ -78,6 +78,7 @@ export class ConnectivityToolPage {
     async waitForMapToLoad() {
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
         await this.page.waitForLoadState('networkidle');
+        await this.waitForMapToReload();
         await this.page.waitForFunction(() => {
             const canvas = document.querySelector('canvas');
             return canvas && canvas.width > 0 && canvas.height > 0;
@@ -85,12 +86,16 @@ export class ConnectivityToolPage {
     }
 
     async refreshPage() {
-       await this.waitForMapToReload();
-       await this.page.reload();
+        await this.waitForMapToReload();
+       // Reload the page and wait until network is idle
+       await this.page.reload({ waitUntil: 'networkidle' });
+       // Ensure the map canvas has re-rendered and is visible
+       await this.waitForMapToLoad();
     }
 
     async waitForMapToReload() {
-        await this.page.waitForTimeout(18000); // Simple wait, can be replaced with more robust logic
+        // Legacy helper retained for compatibility; prefer waitForMapToLoad after reload
+        await this.page.waitForTimeout(8000);
     }
 
     async selectLocalAuthorityView() {

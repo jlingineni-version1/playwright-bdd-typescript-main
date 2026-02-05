@@ -41,10 +41,10 @@ When('I select local authority view {string} & select tile on the map', async ({
   await connectivityToolPage.selectLocalAuthority(localAuthority);
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(469, 133);
-  await connectivityToolPage.waitForMapToReload();
- });
+  await connectivityToolPage.waitForMapToLoad();
+});
 
- When('I refresh the connectivity tool map page', async ({ connectivityToolPage }) => {
+When('I refresh the connectivity tool map page', async ({ connectivityToolPage }) => {
   await connectivityToolPage.refreshPage();
 });
 
@@ -66,10 +66,10 @@ When('I select local authority view {string} & enable show authority band checkb
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(localAuthority);
   await connectivityToolPage.selectShowAuthorityBand();
-  await connectivityToolPage.waitForMapToReload();
+  await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(469, 133);
-  await connectivityToolPage.waitForMapToReload();
- });
+  await connectivityToolPage.waitForMapToLoad();
+});
 
 Then('I should see the authority bands displayed correctly on the map', async ({ connectivityToolPage, page }) => {
   await connectivityToolPage.verifyLocalAuthorityBand();
@@ -95,10 +95,10 @@ When('I select local authority view {string} & select Score by destination {stri
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.selectScoreByDestination(destination);
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
-  await connectivityToolPage.waitForMapToReload();
+  await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(613, 163);
-  await connectivityToolPage.waitForMapToReload();
- });
+  await connectivityToolPage.waitForMapToLoad();
+});
 
 When('I select local authority view {string},Score by destination {string},Score by mode of transport {string},public transport {string}', async ({ connectivityToolPage, mapHelper }, authority: string, destination: string, mode: string, publictransport: string) => {
   await connectivityToolPage.navigateToMap();
@@ -120,15 +120,15 @@ When('I search for location {string} and select coordinates {int},{int} on the m
   await connectivityToolPage.searchLocation(location);
   // await connectivityToolPage.waitForMapToReload();
   await connectivityToolPage.clickMapAtPosition(x, y);
-  await connectivityToolPage.waitForMapToReload();
- });
+  await connectivityToolPage.waitForMapToLoad();
+});
 
 When('I select location {string},coordinates {int},{int},tile on the map & select Map {string}', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number, opacity: string) => {
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.searchLocation(location);
-  await connectivityToolPage.waitForMapToReload();
+  await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(x, y);
-  await connectivityToolPage.waitForMapToReload();
+  await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.clickSettingsLink();
   await connectivityToolPage.selectOpacitySlider(opacity);
 });

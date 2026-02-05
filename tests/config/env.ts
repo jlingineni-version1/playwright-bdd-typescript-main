@@ -34,7 +34,7 @@ const ENV_CONFIG: Record<Env, { BASE_URL: string;APP_URL: string;FULLPAGE_URL:st
 };
 
 // Default = test
-const env = (process.env.ENV as Env) || 'test';
+const env = (process.env.ENV as Env) || 'dev';
 
 // Export URLs
 export const BASE_URL = ENV_CONFIG[env].BASE_URL;
