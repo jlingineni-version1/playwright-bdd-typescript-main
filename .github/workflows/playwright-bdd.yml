@@ -13,7 +13,7 @@ on:
 
 jobs:
   e2e-tests:
-    runs-on: windows-latest
+    runs-on: windows-latest   # <--- WINDOWS
 
     steps:
       # -----------------------------
@@ -22,21 +22,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show branch and commit
+      - name: Show current branch and commit
         shell: pwsh
         run: |
           Write-Host "Branch: $env:GITHUB_REF"
           Write-Host "Commit: $env:GITHUB_SHA"
-
-      # -----------------------------
-      # Restore snapshot artifacts (if present)
-      # -----------------------------
-      - name: Download snapshot artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: snapshot-artifacts
-          path: .
-        continue-on-error: true
 
       # -----------------------------
       # Node setup
@@ -51,7 +41,20 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
+        # --with-deps is Linux-only
         run: npx playwright install
+
+      # -----------------------------
+      # Clean old snapshots
+      # -----------------------------
+      - name: Clean .features-gen and old snapshots
+        shell: pwsh
+        run: |
+          Write-Host "Cleaning generated features and snapshots"
+          if (Test-Path ".features-gen") { Remove-Item ".features-gen" -Recurse -Force -ErrorAction SilentlyContinue }
+          Get-ChildItem -Recurse -Include *.png -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+          if (Test-Path "test-results") { Remove-Item "test-results" -Recurse -Force -ErrorAction SilentlyContinue }
+          if (Test-Path "playwright-report") { Remove-Item "playwright-report" -Recurse -Force -ErrorAction SilentlyContinue }
 
       # -----------------------------
       # Generate BDD tests
@@ -60,21 +63,21 @@ jobs:
         run: npm run bdd:generate
 
       # -----------------------------
-      # OPTIONAL: One-time snapshot generation
-      # REMOVE this once snapshots exist!
+      # ONE-TIME SNAPSHOT CREATION
+      # Remove once snapshots are committed or stored via artifacts
       # -----------------------------
       - name: Generate Windows snapshots (one-time)
-        if: always()
         run: npx playwright test --update-snapshots
 
       # -----------------------------
-      # Windows: Skip PNG validation
+      # PNG validation -- DISABLED ON WINDOWS
+      # Only Linux should validate PNG signatures
       # -----------------------------
-      - name: Skip PNG signature validation on Windows
+      - name: Skip PNG validation on Windows
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Write-Host "Skipping PNG header validation (Windows snapshots differ by OS)."
+          Write-Host "Skipping PNG signature validation on Windows (expected differences)."
 
       # -----------------------------
       # Run Playwright BDD tests
@@ -85,29 +88,33 @@ jobs:
         run: npm test
 
       # -----------------------------
-      # Debug snapshot inspection
+      # Debug output
       # -----------------------------
-      - name: List snapshot directories and files
+      - name: List produced snapshot and test results
         if: always()
         shell: pwsh
         run: |
           Write-Host "Snapshot directories:"
-          Get-ChildItem ".features-gen" -Recurse -Directory -ErrorAction SilentlyContinue |
-            Where-Object { $_.Name -like "*.feature.spec.js-snapshots" } |
-            ForEach-Object {
-              Write-Host $_.FullName
-              Get-ChildItem -Force $_.FullName
-            }
+          Get-ChildItem -Path ".features-gen" -Recurse -Directory -ErrorAction SilentlyContinue `
+            | Where-Object { $_.Name -like "*.feature.spec.js-snapshots" } `
+            | ForEach-Object {
+                Write-Host $_.FullName
+                Get-ChildItem -Force $_.FullName
+              }
 
           Write-Host "PNG snapshot files:"
-          Get-ChildItem ".features-gen" -Recurse -Include *.png -ErrorAction SilentlyContinue |
-            ForEach-Object { Write-Host $_.FullName }
+          Get-ChildItem -Path ".features-gen" -Recurse -Include *.png -ErrorAction SilentlyContinue `
+            | ForEach-Object { Write-Host $_.FullName }
 
           Write-Host "Test results:"
-          if (Test-Path "test-results") { Get-ChildItem -Force "test-results" } else { Write-Host "No test-results folder" }
+          if (Test-Path "test-results") {
+            Get-ChildItem -Force "test-results"
+          } else {
+            Write-Host "test-results not found"
+          }
 
       # -----------------------------
-      # Upload updated snapshots + test results
+      # Upload artifacts
       # -----------------------------
       - name: Upload snapshots and test-results
         if: always()
