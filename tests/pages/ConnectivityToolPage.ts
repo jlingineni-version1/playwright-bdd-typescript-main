@@ -87,10 +87,10 @@ export class ConnectivityToolPage {
 
     async refreshPage() {
         await this.waitForMapToReload();
-       // Reload the page and wait until network is idle
-       await this.page.reload({ waitUntil: 'networkidle' });
-       // Ensure the map canvas has re-rendered and is visible
-       await this.waitForMapToLoad();
+        // Reload the page and wait until network is idle
+        await this.page.reload({ waitUntil: 'networkidle' });
+        // Ensure the map canvas has re-rendered and is visible
+        await this.waitForMapToLoad();
     }
 
     async waitForMapToReload() {
@@ -215,6 +215,16 @@ export class ConnectivityToolPage {
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(8000);
     }
+
+    // async searchByLatitudeAndLongitude(latitude: number, longitude: number) {
+    //     const location = `${latitude},${longitude}`;
+    //     await this.searchComboBox.click();
+    //     await this.searchComboBox.fill(location);
+    //    // Select the second item from the dropdown list 
+    //     await this.page.locator('.app-site-search__option').nth(0).click();
+    //     await this.page.waitForTimeout(8000);
+    //     await this.waitForMapToLoad();
+    // }
 
     async clickMapTilerLink(): Promise<Page> {
         return await PopupHelper.clickAndWaitForPopup(

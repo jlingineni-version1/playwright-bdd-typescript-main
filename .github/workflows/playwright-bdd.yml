@@ -13,7 +13,7 @@ on:
 
 jobs:
   e2e-tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       # -----------------------------
@@ -24,8 +24,8 @@ jobs:
 
       - name: Show current branch and commit
         run: |
-          echo "Branch: $GITHUB_REF"
-          echo "Commit: $GITHUB_SHA"
+          Write-Host "Branch: $env:GITHUB_REF"
+          Write-Host "Commit: $env:GITHUB_SHA"
 
       # -----------------------------
       # Node setup
@@ -40,17 +40,20 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        # --with-deps is Linux-only; omit on Windows
+        run: npx playwright install
 
       # -----------------------------
       # CRITICAL: Clean old artifacts
       # -----------------------------
       - name: Clean .features-gen and old snapshots
+        shell: pwsh
         run: |
-          echo "Cleaning generated features and snapshots"
-          rm -rf .features-gen
-          find . -name "*.png" -delete
-          rm -rf test-results playwright-report
+          Write-Host "Cleaning generated features and snapshots"
+          if (Test-Path ".features-gen") { Remove-Item ".features-gen" -Recurse -Force -ErrorAction SilentlyContinue }
+          Get-ChildItem -Recurse -Include *.png -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+          if (Test-Path "test-results") { Remove-Item "test-results" -Recurse -Force -ErrorAction SilentlyContinue }
+          if (Test-Path "playwright-report") { Remove-Item "playwright-report" -Recurse -Force -ErrorAction SilentlyContinue }
 
       # -----------------------------
       # Generate BDD tests
@@ -61,18 +64,39 @@ jobs:
       # -----------------------------
       # ONE-TIME STEP (REMOVE AFTER SNAPSHOTS ARE COMMITTED)
       # -----------------------------
-      - name: Generate Linux snapshots (one-time)
+      - name: Generate Windows snapshots (one-time)
         run: npx playwright test --update-snapshots
 
       # -----------------------------
       # Validate PNG snapshots (guards against corruption)
       # -----------------------------
       - name: Validate snapshot PNG headers
+        shell: pwsh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y file
-          echo "Validating PNG snapshots..."
-          find .features-gen -name "*.png" -exec file {} \;
+          $pngSignature = [byte[]](137,80,78,71,13,10,26,10)  # 89 50 4E 47 0D 0A 1A 0A
+          $pngFiles = Get-ChildItem -Path ".features-gen" -Recurse -Include *.png -ErrorAction SilentlyContinue
+          if (-not $pngFiles) {
+            Write-Host "No PNG files found under .features-gen"
+          } else {
+            foreach ($f in $pngFiles) {
+              try {
+                $fs = [System.IO.File]::OpenRead($f.FullName)
+                try {
+                  $buf = New-Object byte[] 8
+                  $bytesRead = $fs.Read($buf, 0, 8)
+                  if ($bytesRead -ne 8 -or -not ($buf -ceq $pngSignature)) {
+                    Write-Error "Invalid PNG signature: $($f.FullName)"
+                  } else {
+                    Write-Host "OK: $($f.FullName)"
+                  }
+                } finally {
+                  $fs.Dispose()
+                }
+              } catch {
+                Write-Error "Failed to read: $($f.FullName) - $($_.Exception.Message)"
+              }
+            }
+          }
 
       # -----------------------------
       # Run Playwright BDD tests
@@ -87,13 +111,26 @@ jobs:
       # -----------------------------
       - name: List produced snapshot and test results
         if: always()
+        shell: pwsh
         run: |
-          echo "Snapshot directories:"
-          find .features-gen -type d -name "*.feature.spec.js-snapshots" -print -exec ls -la {} \; || true
-          echo "PNG snapshot files:"
-          find .features-gen -type f -name "*.png" -print || true
-          echo "Test results:"
-          ls -la test-results || true
+          Write-Host "Snapshot directories:"
+          Get-ChildItem -Path ".features-gen" -Recurse -Directory -ErrorAction SilentlyContinue `
+            | Where-Object { $_.Name -like "*.feature.spec.js-snapshots" } `
+            | ForEach-Object {
+                Write-Host $_.FullName
+                Get-ChildItem -Force $_.FullName
+              }
+
+          Write-Host "PNG snapshot files:"
+          Get-ChildItem -Path ".features-gen" -Recurse -Include *.png -ErrorAction SilentlyContinue `
+            | ForEach-Object { Write-Host $_.FullName }
+
+          Write-Host "Test results:"
+          if (Test-Path "test-results") {
+            Get-ChildItem -Force "test-results"
+          } else {
+            Write-Host "test-results not found"
+          }
 
       # -----------------------------
       # Upload artifacts

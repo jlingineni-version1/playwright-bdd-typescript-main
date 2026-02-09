@@ -84,7 +84,7 @@ Feature: Connectivity Tool Map Navigation
       | City of London | Shopping    | Driving          | Ferry             |
       | Blackpool      | Leisure     | Driving          | Tram Tram         |
 
-  @filtermap @regression
+  @search @regression
   Scenario Outline: Verify Score on map for different local authorities
     When I search for location "<location>" and select coordinates <x>,<y> on the map & select tile on the map
     Then I should see the connectivity score displayed correctly on the map for "<location>" as "<expectedScore>"
@@ -92,6 +92,14 @@ Feature: Connectivity Tool Map Navigation
       | location                                  | expectedScore | x   | y   |
       | Hounslow West, London Borough of Hounslow | 86            | 476 | 275 |
       | Leeds, England, United Kingdom            | 87            | 301 | 278 |
+
+      @regression @search
+      Scenario:Verify search functionality by entering latitude and longitude and select the location from dropdown
+        When I search for location by entering <latitude> and <longitude> and select coordinates <x>,<y> on the map & select tile on the map
+        Then I should see the connectivity score "<expectedScore>" displayed correctly on the map for the searched location
+        Examples:
+          | latitude  | longitude  | x   | y   |expectedScore |
+          |53.004042  | -1.124470  | 422 | 206 | 82           |
 
   @MapTiler @regression @smoke
   Scenario: Verify Map Tiler is redicrected to expected screen and navigate back to connectivity tool map page
