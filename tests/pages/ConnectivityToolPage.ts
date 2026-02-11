@@ -76,17 +76,31 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToLoad() {
+        // Ensure map container and canvas are visible
+        await this.page.waitForSelector('[data-testid="map"]', { state: 'visible' });
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
+
+        // Wait for the 'data-map-tiles-loaded="true"' attribute to be set on the map element
+        await this.page.waitForFunction(
+            () => {
+                const mapElement = document.querySelector('[data-testid="map"]');
+                return mapElement?.getAttribute('data-map-tiles-loaded') === 'true';
+            },
+            { timeout: 80000 } // You can adjust the timeout duration as needed
+        );
+
+        // Network should be idle once tiles loaded
         await this.page.waitForLoadState('networkidle');
-        await this.waitForMapToReload();
+
+        // Confirm canvas has non-zero size
         await this.page.waitForFunction(() => {
-            const canvas = document.querySelector('canvas');
-            return canvas && canvas.width > 0 && canvas.height > 0;
+            const canvas = document.querySelector('[data-testid="map-canvas"]') as HTMLCanvasElement | null;
+            return !!canvas && canvas.width > 0 && canvas.height > 0;
         });
     }
 
     async refreshPage() {
-        await this.waitForMapToReload();
+        // await this.waitForMapToReload();
         // Reload the page and wait until network is idle
         await this.page.reload({ waitUntil: 'networkidle' });
         // Ensure the map canvas has re-rendered and is visible
