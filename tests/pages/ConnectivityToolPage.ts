@@ -76,21 +76,38 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToLoad() {
+        // Ensure map container and canvas are visible 
+        await this.page.waitForSelector('[data-testid="map"]', { state: 'visible' });
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
+        // Wait for the 'data-map-tiles-loaded="true"' attribute to be set on the map element 
+        await this.page.waitForFunction(
+            () => {
+                const mapElement = document.querySelector('[data-testid="map"]');
+                return mapElement?.getAttribute('data-map-tiles-loaded') === 'true';
+            }, { timeout: 100000 } // You can adjust the timeout duration as needed );
+        );
+
+        // Network should be idle once tiles loaded 
         await this.page.waitForLoadState('networkidle');
+
+        // Confirm canvas has non-zero size 
         await this.page.waitForFunction(() => {
-            const canvas = document.querySelector('canvas');
-            return canvas && canvas.width > 0 && canvas.height > 0;
+            const canvas = document.querySelector('[data-testid="map-canvas"]') as HTMLCanvasElement | null;
+            return !!canvas && canvas.width > 0 && canvas.height > 0;
         });
     }
 
     async refreshPage() {
-       await this.waitForMapToReload();
-       await this.page.reload();
+        await this.waitForMapToLoad();
+        // Reload the page and wait until network is idle
+        await this.page.reload({ waitUntil: 'networkidle' });
+        // Ensure the map canvas has re-rendered and is visible
+        await this.waitForMapToLoad();
     }
 
     async waitForMapToReload() {
-        await this.page.waitForTimeout(18000); // Simple wait, can be replaced with more robust logic
+        // Legacy helper retained for compatibility; prefer waitForMapToLoad after reload
+        await this.page.waitForTimeout(8000);
     }
 
     async selectLocalAuthorityView() {
@@ -210,6 +227,16 @@ export class ConnectivityToolPage {
         await this.page.locator('.app-site-search__option').nth(0).click();
         await this.page.waitForTimeout(8000);
     }
+
+    // async searchByLatitudeAndLongitude(latitude: number, longitude: number) {
+    //     const location = `${latitude},${longitude}`;
+    //     await this.searchComboBox.click();
+    //     await this.searchComboBox.fill(location);
+    //    // Select the second item from the dropdown list 
+    //     await this.page.locator('.app-site-search__option').nth(0).click();
+    //     await this.page.waitForTimeout(8000);
+    //     await this.waitForMapToLoad();
+    // }
 
     async clickMapTilerLink(): Promise<Page> {
         return await PopupHelper.clickAndWaitForPopup(
