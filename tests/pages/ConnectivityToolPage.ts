@@ -76,7 +76,7 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToLoad() {
-        // Ensure map container and canvas are visible
+        // Wait for the map container and canvas to be visible
         await this.page.waitForSelector('[data-testid="map"]', { state: 'visible' });
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
 
@@ -86,21 +86,21 @@ export class ConnectivityToolPage {
                 const mapElement = document.querySelector('[data-testid="map"]');
                 return mapElement?.getAttribute('data-map-tiles-loaded') === 'true';
             },
-            { timeout: 80000 } // You can adjust the timeout duration as needed
+            { timeout: 30000, pollingInterval: 500 } // Check periodically (500ms) up to 30s for attribute change
         );
 
-        // Network should be idle once tiles loaded
+        // Instead of waiting for a specific timeout, wait for network to be idle
         await this.page.waitForLoadState('networkidle');
 
-        // Confirm canvas has non-zero size
+        // Confirm canvas has non-zero size (using waitForFunction with a shorter timeout)
         await this.page.waitForFunction(() => {
             const canvas = document.querySelector('[data-testid="map-canvas"]') as HTMLCanvasElement | null;
-            return !!canvas && canvas.width > 0 && canvas.height > 0;
-        });
+            return canvas && canvas.width > 0 && canvas.height > 0;
+        }, { timeout: 15000, pollingInterval: 500 }); // Check every 500ms for 15 seconds
     }
 
     async refreshPage() {
-        // await this.waitForMapToReload();
+        await this.waitForMapToLoad();
         // Reload the page and wait until network is idle
         await this.page.reload({ waitUntil: 'networkidle' });
         // Ensure the map canvas has re-rendered and is visible

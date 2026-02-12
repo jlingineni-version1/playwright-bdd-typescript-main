@@ -18,16 +18,16 @@ export class MapHelper {
         const mapElement = document.querySelector('[data-testid="map"]');
         return mapElement?.getAttribute('data-map-tiles-loaded') === 'true';
       },
-      { timeout: 80000 } // You can adjust the timeout duration as needed
+      { timeout: 30000, pollingInterval: 500 } // Check every 500ms for 30 seconds
     );
 
-    // Wait for all network requests to settle
+    // Wait for network requests to settle (networkidle)
     await this.page.waitForLoadState('networkidle');
 
-    // Ensure canvas is rendered
+    // Ensure canvas is rendered with non-zero size
     await this.page.waitForFunction(() => {
       const canvas = document.querySelector('[data-testid="map-canvas"]') as HTMLCanvasElement | null;
-      return !!canvas && canvas.width > 0 && canvas.height > 0;
-    });
+      return canvas && canvas.width > 0 && canvas.height > 0;
+    }, { timeout: 15000, pollingInterval: 500 }); // Check every 500ms for 15 seconds
   }
 }
