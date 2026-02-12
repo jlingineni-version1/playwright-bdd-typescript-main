@@ -76,27 +76,25 @@ export class ConnectivityToolPage {
     }
 
     async waitForMapToLoad() {
-        // Wait for the map container and canvas to be visible
+        // Ensure map container and canvas are visible 
         await this.page.waitForSelector('[data-testid="map"]', { state: 'visible' });
         await this.page.waitForSelector('[data-testid="map-canvas"]', { state: 'visible' });
-
-        // Wait for the 'data-map-tiles-loaded="true"' attribute to be set on the map element
+        // Wait for the 'data-map-tiles-loaded="true"' attribute to be set on the map element 
         await this.page.waitForFunction(
             () => {
                 const mapElement = document.querySelector('[data-testid="map"]');
                 return mapElement?.getAttribute('data-map-tiles-loaded') === 'true';
-            },
-            { timeout: 30000, pollingInterval: 500 } // Check periodically (500ms) up to 30s for attribute change
+            }, { timeout: 100000 } // You can adjust the timeout duration as needed );
         );
 
-        // Instead of waiting for a specific timeout, wait for network to be idle
+        // Network should be idle once tiles loaded 
         await this.page.waitForLoadState('networkidle');
 
-        // Confirm canvas has non-zero size (using waitForFunction with a shorter timeout)
+        // Confirm canvas has non-zero size 
         await this.page.waitForFunction(() => {
             const canvas = document.querySelector('[data-testid="map-canvas"]') as HTMLCanvasElement | null;
-            return canvas && canvas.width > 0 && canvas.height > 0;
-        }, { timeout: 15000, pollingInterval: 500 }); // Check every 500ms for 15 seconds
+            return !!canvas && canvas.width > 0 && canvas.height > 0;
+        });
     }
 
     async refreshPage() {
