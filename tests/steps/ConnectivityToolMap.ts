@@ -143,6 +143,14 @@ When('I select location {string},coordinates {int},{int},tile on the map & selec
   await connectivityToolPage.selectOpacitySlider(opacity);
 });
 
+When('I search for location by entering postcode {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, mapHelper }, postcode: string, x: number, y: number) => {
+  await mapHelper.waitForMapToLoad();
+  await connectivityToolPage.searchLocation(postcode);
+  await connectivityToolPage.waitForMapToLoad();
+  await connectivityToolPage.clickMapAtPosition(x, y);
+  await connectivityToolPage.waitForMapToLoad();
+});
+
 Then('capture a canvas screenshot of the map for {string} with all {string} stops', async ({ connectivityToolPage }, location: string, publictransport: string) => {
   const screenshot = await connectivityToolPage.takeCanvasScreenshot();
   await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + publictransport + '-canvas-connectivity.png');
