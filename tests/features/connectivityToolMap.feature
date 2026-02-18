@@ -99,7 +99,7 @@ Feature: Connectivity Tool Map Navigation
     Then I should see the connectivity score "<expectedScore>" displayed correctly on the map for the searched location
     Examples:
       | latitude  | longitude | x   | y   | expectedScore |
-      | 53.004042 | -1.124470 | 422 | 206 | 76            |
+      | 53.004042 | -1.124470 | 422 | 206 | 82            |
 
   @regression @search
   Scenario: Verify search functionality by entering postcode and select the location from dropdown and verify

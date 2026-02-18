@@ -178,7 +178,7 @@ export class ConnectivityToolPage {
         console.log('Connectivity Score:', scoreText);
         const expectedScoreNumber = Number(expectedScore);
         console.log('Expected Score Number:', expectedScoreNumber);
-        const isRedColor = Number(scoreText) >= Number(expectedScore) ? true : false;
+        const isRedColor = Number(scoreText) === expectedScoreNumber ? true : false;
         expect(isRedColor).toBeTruthy();
     }
 
