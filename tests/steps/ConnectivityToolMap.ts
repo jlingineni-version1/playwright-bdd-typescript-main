@@ -118,6 +118,7 @@ When('I search for location by entering {float} and {float} and select coordinat
   await mapHelper.waitForMapToLoad();
   const location = `${latitude},${longitude}`;
   await connectivityToolPage.searchLocation(location);
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(x, y);
   await connectivityToolPage.waitForMapToLoad();
 });
@@ -129,6 +130,7 @@ Then('I should see the connectivity score {string} displayed correctly on the ma
 When('I search for location {string} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, mapHelper }, location: string, x: number, y: number) => {
   await mapHelper.waitForMapToLoad();
   await connectivityToolPage.searchLocation(location);
+  await mapHelper.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(x, y);
   await connectivityToolPage.waitForMapToLoad();
 });
