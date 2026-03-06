@@ -2,7 +2,7 @@ name: Playwright BDD Daily Run
 
 on:
   schedule:
-    - cron: '0 19 * * *'   # Daily at 7 PM UTC
+    - cron: '0 18 * * *'   # Daily at 6 PM UTC
   workflow_dispatch:
   push:
     branches:
