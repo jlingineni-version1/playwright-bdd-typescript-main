@@ -121,7 +121,7 @@ export class ConnectivityToolPage {
         }
         const transport = await this.page.getByRole('checkbox', { name: `Icon for ${publicTransport}` })
         await transport.check();
-        // await this.page.waitForTimeout(8000);
+        await this.page.waitForTimeout(8000);
     }
 
     async clickPublicTransportShowLink() {
@@ -142,7 +142,7 @@ export class ConnectivityToolPage {
 
     async selectLocalAuthority(authority: string) {
         await this.LocalAuthorityDropDown.selectOption(authority);
-        // await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(1000);
     }
 
     async selectShowAuthorityBand() {

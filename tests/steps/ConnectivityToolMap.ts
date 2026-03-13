@@ -19,7 +19,7 @@ When('I apply filters on the map & select local authority view {string} & select
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(authority);
-  await connectivityToolPage.waitForMapToLoad();
+  // await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.selectScoreByDestination(destination);
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
@@ -66,7 +66,7 @@ When('I select local authority view {string} & enable show authority band checkb
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(localAuthority);
-  await connectivityToolPage.waitForMapToLoad();
+  // await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.clickMapAtPosition(469, 133);
@@ -82,7 +82,7 @@ When('I select localauthorityview as {string} & select Scorebydestination as {st
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(authority);
-  await connectivityToolPage.waitForMapToLoad();
+  // await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.selectScoreByDestination(destination);
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
@@ -95,7 +95,7 @@ When('I select local authority view {string} & select Score by destination {stri
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(authority);
-  await connectivityToolPage.waitForMapToLoad();
+  // await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.selectScoreByDestination(destination);
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
@@ -111,13 +111,13 @@ When('I select local authority view {string},Score by destination {string},Score
   await connectivityToolPage.clickShowButton();
   await connectivityToolPage.selectLocalAuthorityView();
   await connectivityToolPage.selectLocalAuthority(authority);
-  await connectivityToolPage.waitForMapToLoad();
+  // await connectivityToolPage.waitForMapToLoad();
   await connectivityToolPage.selectShowAuthorityBand();
   await connectivityToolPage.selectScoreByDestination(destination);
   await connectivityToolPage.selectScoreByModeOfTransport(mode);
   await connectivityToolPage.clickPublicTransportShowLink();
   await connectivityToolPage.checkPublicTransport(publictransport);
-  await connectivityToolPage.waitForMapToLoad();
+  // await connectivityToolPage.waitForMapToLoad();
 });
 
 When('I search for location by entering {float} and {float} and select coordinates {int},{int} on the map & select tile on the map', async ({ connectivityToolPage, mapHelper }, latitude: number, longitude: number, x: number, y: number) => {
