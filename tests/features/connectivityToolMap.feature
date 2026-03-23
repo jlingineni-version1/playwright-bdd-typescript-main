@@ -2,7 +2,7 @@ Feature: Connectivity Tool Map Navigation
 
   Background: Filter map functionality test
     Given I am on the home page & I navigate to the connectivity tool map
-  
+
   @home @regression
   Scenario: Refresh connectivity tool map page and verify all elements are loaded correctly
     When I refresh the connectivity tool map page
@@ -85,7 +85,7 @@ Feature: Connectivity Tool Map Navigation
       | Blackpool      | Leisure     | Driving          | Tram Tram         |
 
   @search @regression
-  Scenario Outline: Verify Score on map for different local authorities
+  Scenario Outline: Verify score on map for different local authorities
     When I search for location "<location>" and select coordinates <x>,<y> on the map & select tile on the map
     Then I should see the connectivity score displayed correctly on the map for "<location>" as "<expectedScore>"
     Examples:
@@ -93,13 +93,22 @@ Feature: Connectivity Tool Map Navigation
       | Hounslow West, London Borough of Hounslow | 86            | 476 | 275 |
       | Leeds, England, United Kingdom            | 87            | 301 | 278 |
 
-      @regression @search
-      Scenario:Verify search functionality by entering latitude and longitude and select the location from dropdown
-        When I search for location by entering <latitude> and <longitude> and select coordinates <x>,<y> on the map & select tile on the map
-        Then I should see the connectivity score "<expectedScore>" displayed correctly on the map for the searched location
-        Examples:
-          | latitude  | longitude  | x   | y   |expectedScore |
-          |53.004042  | -1.124470  | 422 | 206 | 82           |
+  @regression @search
+  Scenario:Verify search functionality by entering latitude and longitude and select the location from dropdown
+    When I search for location by entering <latitude> and <longitude> and select coordinates <x>,<y> on the map & select tile on the map
+    Then I should see the connectivity score "<expectedScore>" displayed correctly on the map for the searched location
+    Examples:
+      | latitude  | longitude | x   | y   | expectedScore |
+      | 53.004042 | -1.124470 | 422 | 206 | 82            |
+
+  @regression @search
+  Scenario: Verify search functionality by entering postcode and select the location from dropdown and verify
+    When I search for location by entering postcode "<postcode>" and select coordinates <x>,<y> on the map & select tile on the map
+    Then I should see the connectivity score "<expectedScore>" displayed correctly on the map for the searched location
+    Examples:
+      | postcode | x   | y   | expectedScore |
+      | TW13 6AE | 424 | 298 | 81            |
+
 
   @MapTiler @regression @smoke
   Scenario: Verify Map Tiler is redicrected to expected screen and navigate back to connectivity tool map page
