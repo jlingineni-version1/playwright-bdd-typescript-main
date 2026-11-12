@@ -242,6 +242,12 @@ When('I click on Open Street Map Contributors link on the connectivity tool map 
   await connectivityToolPage.clickOpenStreetMapLink();
 });
 
+When('I click on release notes link and validate the release notes page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickReleaseNotesLink();
+  await homePage.validateReleaseNotesHeading();
+  await homePage.clickBreadcrumbConnectivityToolLink();
+});
+
 Then('I should be redirected to Open Street Map Contributors screen and navigate back to connectivity tool map page', async ({ connectivityToolPage, openStreetMapPage, page }) => {
   openStreetMapPage = new OpenStreetMapPage(page);
   await openStreetMapPage.verifyOpenStreetMapHeading();

@@ -47,7 +47,7 @@ export class ConnectivityToolPage {
         this.opacityDisplay = this.page.getByTestId('map-opacity');
         this.zoomOutButton = this.page.getByRole('button', { name: 'Zoom out' });
         this.showPublicTrasportHeading = page.getByRole('heading', { name: 'Show public transport stops' });
-        this.govUKLink = this.page.locator('a:has(img[alt="GOV.UK"])');
+        this.govUKLink = this.page.getByTestId('header').getByRole('link', { name: 'GOV.UK' });
     }
 
     async clickGovUKLink() {

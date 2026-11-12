@@ -33,7 +33,7 @@ function canonicalizeSnapshotName(name: string) {
 export class VisualSnapshotHelper {
   static defaultOptions = {
     maxDiffPixelRatio: 0.2,
-    maxDiffPixels: 200000,
+    maxDiffPixels: 150,
   } as const;
 
   /**

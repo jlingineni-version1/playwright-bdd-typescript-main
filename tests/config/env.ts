@@ -1,14 +1,15 @@
 type Env = 'dev' | 'test' | 'prod';
 
-const ENV_CONFIG: Record<Env, { BASE_URL: string;APP_URL: string;FULLPAGE_URL:string;MAP_URL:string,Accesibility_URL:string,Private_Policy_URL:string,Guidance_URL:string,Understand_Data_URL:string}> = {
+const ENV_CONFIG: Record<Env, { Release_Notes_URL: string; BASE_URL: string;APP_URL: string;FULLPAGE_URL:string;MAP_URL:string,Accesibility_URL:string,Private_Policy_URL:string,Guidance_URL:string,Understand_Data_URL:string}> = {
   dev: {
     BASE_URL: 'https://connectivity-tool-lite-dev.dft.gov.uk',
     APP_URL: 'https://connectivity-tool-lite-dev.dft.gov.uk/app',
     FULLPAGE_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/app#6/52.879/-0.47',
     MAP_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/app#14/52.879/-0.47',
-    Accesibility_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/help/accessibility-statement',
-    Private_Policy_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/help/privacy-policy',
+    Accesibility_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/accessibility-statement',
+    Private_Policy_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/privacy',
     Guidance_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/help/guidance',
+    Release_Notes_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/release-notes',
     Understand_Data_URL:'https://connectivity-tool-lite-dev.dft.gov.uk/help/understand-the-data'
   },
   test: {
@@ -16,9 +17,10 @@ const ENV_CONFIG: Record<Env, { BASE_URL: string;APP_URL: string;FULLPAGE_URL:st
     APP_URL: 'https://connectivity-tool-lite-test.dft.gov.uk/app',
     MAP_URL:'https://connectivity-tool-lite-test.dft.gov.uk/app#14/52.879/-0.47',
     FULLPAGE_URL:'https://connectivity-tool-lite-test.dft.gov.uk/app#6/52.879/-0.47',
-    Accesibility_URL:'https://connectivity-tool-lite-test.dft.gov.uk/help/accessibility-statement',
-    Private_Policy_URL:'https://connectivity-tool-lite-test.dft.gov.uk/help/privacy-policy',
+    Accesibility_URL:'https://connectivity-tool-lite-test.dft.gov.uk/accessibility-statement',
+    Private_Policy_URL:'https://connectivity-tool-lite-test.dft.gov.uk/privacy',
     Guidance_URL:'https://connectivity-tool-lite-test.dft.gov.uk/help/guidance',
+    Release_Notes_URL:'https://connectivity-tool-lite-test.dft.gov.uk/release-notes',
     Understand_Data_URL:'https://connectivity-tool-lite-test.dft.gov.uk/help/understand-the-data'
   },
   prod: {
@@ -29,12 +31,13 @@ const ENV_CONFIG: Record<Env, { BASE_URL: string;APP_URL: string;FULLPAGE_URL:st
     Accesibility_URL:'https://connectivity-tool-lite.dft.gov.uk/help/accessibility-statement',
     Private_Policy_URL:'https://connectivity-tool-lite.dft.gov.uk/help/privacy-policy',
     Guidance_URL:'https://connectivity-tool-lite.dft.gov.uk/help/guidance',
+    Release_Notes_URL:'https://connectivity-tool-lite.dft.gov.uk/release-notes',
     Understand_Data_URL:'https://connectivity-tool-lite.dft.gov.uk/help/understand-the-data'
   },
 };
 
 // Default = test
-const env = (process.env.ENV as Env) || 'test';
+const env = (process.env.ENV as Env) || 'dev';
 
 // Export URLs
 export const BASE_URL = ENV_CONFIG[env].BASE_URL;
