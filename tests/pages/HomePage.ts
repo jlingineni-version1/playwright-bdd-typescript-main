@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-import { BASE_URL, MAP_URL, Accesibility_URL, Private_Policy_URL, Guidance_URL, Understand_Data_URL } from '../config/env';
+import { BASE_URL, MAP_URL, Accesibility_URL, Private_Policy_URL, Guidance_URL, Understand_Data_URL, Release_Notes_URL } from '../config/env';
 import { PopupHelper } from '../helpers/popUpHelper';
 
 export class HomePage {
@@ -37,6 +37,9 @@ export class HomePage {
     readonly findOutMoreHeading;
     readonly transportConnectivityMetricLink;
     readonly transportConnectivityMetricHeading;
+    readonly breadcrumbConnectivityToolLink;
+    readonly releaseNotesLink;
+    readonly releaseNotesHeading;
 
     constructor(private page: Page) {
         this.pageTitle = this.page.getByRole('heading', { name: 'Discover connectivity in your local area' });
@@ -45,7 +48,7 @@ export class HomePage {
         this.accessibilityHeading = this.page.getByRole('heading', { name: 'Accessibility statement', exact: true });
         this.backLink = this.page.getByRole('link', { name: 'Back', exact: true });
         this.privatePolicyLink = this.page.getByRole('link', { name: 'Privacy policy' });
-        this.privacyPolicyHeading = this.page.getByRole('heading', { name: 'Privacy policy' });
+        this.privacyPolicyHeading = this.page.getByRole('heading', { name: 'Connectivity Tool Lite: Privacy notice' });
         this.guidanceLink = this.page.getByRole('contentinfo').getByRole('link', { name: 'Guidance' });
         this.guidanceHeading = this.page.getByRole('heading', { name: 'Connectivity Tool User Manual' })
         this.guidanceClickableLink = this.page.getByRole('navigation').getByRole('link', { name: 'Guidance' });
@@ -73,6 +76,22 @@ export class HomePage {
         this.findOutMoreHeading = page.getByRole('heading', { name: 'Understand The Data' });
         this.transportConnectivityMetricLink = page.getByRole('link', { name: 'Transport connectivity metric' });
         this.transportConnectivityMetricHeading = page.locator('h1');
+        this.breadcrumbConnectivityToolLink = page.getByLabel('Breadcrumb').getByRole('link', { name: 'Connectivity Tool' });
+        this.releaseNotesHeading = page.getByRole('heading', { name: 'Release notes' });
+        this.releaseNotesLink = page.getByRole('link', { name: 'Release notes' });
+    }
+
+    async clickBreadcrumbConnectivityToolLink() {
+        await this.breadcrumbConnectivityToolLink.click();
+    }
+
+    async clickReleaseNotesLink() {
+        await this.releaseNotesLink.click();
+        await expect(this.page).toHaveURL(Release_Notes_URL);
+    }
+
+    async validateReleaseNotesHeading() {
+        await expect(this.releaseNotesHeading).toBeVisible();
     }
 
     async titlesVisible() {
@@ -83,7 +102,7 @@ export class HomePage {
         await expect(this.departmentForTransportTitle).toBeVisible();
     }
 
-    async clickTransportConnectivityMetricLink() {  
+    async clickTransportConnectivityMetricLink() {
         await this.transportConnectivityMetricLink.click();
         await expect(this.transportConnectivityMetricHeading).toBeVisible();
     }

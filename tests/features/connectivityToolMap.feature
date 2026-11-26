@@ -89,9 +89,10 @@ Feature: Connectivity Tool Map Navigation
     When I search for location "<location>" and select coordinates <x>,<y> on the map & select tile on the map
     Then I should see the connectivity score displayed correctly on the map for "<location>" as "<expectedScore>"
     Examples:
-      | location                                  | expectedScore | x   | y   |
-      | Hounslow West, London Borough of Hounslow | 86            | 476 | 275 |
-      | Leeds, England, United Kingdom            | 87            | 301 | 278 |
+      | location                                                                             | expectedScore | x   | y   |
+      | Hounslow West, London Borough of Hounslow                                            | 86            | 476 | 275 |
+      | Leeds, England, United Kingdom                                                       | 73            | 301 | 278 |
+      | London Bridge Street, London Borough of Southwark, England, United Kingdom, SE1 9SG  | 97            | 538 | 218 |
 
   @regression @search
   Scenario:Verify search functionality by entering latitude and longitude and select the location from dropdown
@@ -124,5 +125,10 @@ Feature: Connectivity Tool Map Navigation
   Scenario: Verify Open Street Map Contributors link is redirected to expected screen and navigate back to connectivity tool map page
     When I click on Open Street Map Contributors link on the connectivity tool map page
     Then I should be redirected to Open Street Map Contributors screen and navigate back to connectivity tool map page
+
+  # @footer @releasenotes @regression
+  # Scenario:Home page release notes link check
+  #   When I click on release notes link and validate the release notes page is displayed successfully
+  #   Then navigate back to home page
 
 

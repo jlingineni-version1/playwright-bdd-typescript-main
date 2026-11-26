@@ -1,8 +1,9 @@
-import { expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { Buffer } from 'buffer';
 import * as fs from 'fs';
 import * as fsp from 'fs/promises';
 import * as path from 'path';
+import { MapHelper } from './map.helper';
 
 const KNOWN_TOKENS = [
   'chromium',
@@ -31,10 +32,22 @@ function canonicalizeSnapshotName(name: string) {
 }
 
 export class VisualSnapshotHelper {
-  static defaultOptions = {
-    maxDiffPixelRatio: 0.2,
-    maxDiffPixels: 200000,
-  } as const;
+  static visualOptions = {
+    maxDiffPixelRatio: 0.005,
+    maxDiffPixels: 25,
+  };
+
+  static canvasOptions = {
+    maxDiffPixelRatio: 0.02,
+    maxDiffPixels: 150,
+  };
+
+  // Impact area map renders can vary due map tile/label jitter while route geometry remains valid.
+  static impactAreaCanvasOptions = {
+    maxDiffPixelRatio: 0.12,
+    maxDiffPixels: 60000,
+    threshold: 0.3,
+  };
 
   /**
    * Compare a screenshot buffer to a canonical snapshot filename.
@@ -69,12 +82,58 @@ export class VisualSnapshotHelper {
       if (err instanceof Error) throw err;
       throw new Error(String(err));
     }
-    await expect(screenshot).toMatchSnapshot(canonical, this.defaultOptions);
+    await expect(screenshot).toMatchSnapshot(canonical, this.visualOptions);
   }
 
   static async compareCanvasScreenshot(screenshot: Buffer, snapshotName: string) {
     const canonical = canonicalizeSnapshotName(snapshotName);
-    await expect(screenshot).toMatchSnapshot(canonical, this.defaultOptions);
+    await expect(screenshot).toMatchSnapshot(canonical, this.canvasOptions);
+  }
+
+  static async compareImpactAreaCanvasScreenshot(screenshot: Buffer, snapshotName: string) {
+    const canonical = canonicalizeSnapshotName(snapshotName);
+    await expect(screenshot).toMatchSnapshot(canonical, this.impactAreaCanvasOptions);
+  }
+
+  static async takeScreenshot(page: Page): Promise<Buffer> {
+    return await page.screenshot();
+  }
+
+  static async takeConnectivityToolFullPageScreenshot(page: Page): Promise<Buffer> {
+    await page.waitForSelector('text="Filter map"', { state: 'visible', timeout: 30000 });
+    // Resizing grows the map container, which triggers a MapLibre resize and new tile loads;
+    // a ready flag left over from before the resize must not be trusted.
+    await new MapHelper(page).waitForMapIdleAfter(() => page.setViewportSize({ width: 1920, height: 1080 }));
+
+    const scrollbarMask = await page.addStyleTag({
+      content: `
+                html, body {
+                    scrollbar-width: none !important;
+                    -ms-overflow-style: none !important;
+                }
+
+                html::-webkit-scrollbar,
+                body::-webkit-scrollbar,
+                .sidebar-scrollable::-webkit-scrollbar,
+                .svelte-1z0x0::-webkit-scrollbar {
+                    display: none !important;
+                }
+
+                .sidebar-scrollable,
+                .sidebar-scrollable.svelte-1z0x0,
+                .svelte-1z0x0 {
+                    scrollbar-width: none !important;
+                    -ms-overflow-style: none !important;
+                    overflow-y: hidden !important;
+                }
+            `,
+    });
+
+    try {
+      return await page.screenshot({ fullPage: true });
+    } finally {
+      await scrollbarMask.evaluate((node) => node.parentNode?.removeChild(node));
+    }
   }
 
   static async connectivityToolFullPageScreenshot(screenshot: Buffer, snapshotName: string) {
@@ -100,7 +159,7 @@ export class VisualSnapshotHelper {
       if (err instanceof Error) throw err;
       throw new Error(String(err));
     }
-    await expect(screenshot).toMatchSnapshot(canonical, this.defaultOptions);
+    await expect(screenshot).toMatchSnapshot(canonical, this.visualOptions);
   }
 }
 

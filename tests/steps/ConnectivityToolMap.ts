@@ -169,8 +169,10 @@ Then('I capture a canvas screenshot of the map with the {string} percentage appl
   await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + opacity + '-canvas-connectivity.png');
 });
 
-Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage }, location: string, expectedScore: string) => {
+Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage,page }, location: string, expectedScore: string) => {
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
+  const screenshot = await VisualSnapshotHelper.takeScreenshot(page);
+  await VisualSnapshotHelper.compareScreenshot(screenshot, location + '-connectivity-tool-map.png');
 });
 
 Then('I should see the connectivity score displayed correctly on the map', async ({ connectivityToolPage }) => {
@@ -240,6 +242,12 @@ Then('I should be redirected to GOV.UK screen and navigate back to connectivity 
 
 When('I click on Open Street Map Contributors link on the connectivity tool map page', async ({ connectivityToolPage }) => {
   await connectivityToolPage.clickOpenStreetMapLink();
+});
+
+When('I click on release notes link and validate the release notes page is displayed successfully', async ({ homePage }) => {
+  await homePage.clickReleaseNotesLink();
+  await homePage.validateReleaseNotesHeading();
+  await homePage.clickBreadcrumbConnectivityToolLink();
 });
 
 Then('I should be redirected to Open Street Map Contributors screen and navigate back to connectivity tool map page', async ({ connectivityToolPage, openStreetMapPage, page }) => {
