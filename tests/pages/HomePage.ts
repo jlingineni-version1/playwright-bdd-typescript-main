@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-import { BASE_URL, MAP_URL, Accesibility_URL, Private_Policy_URL, Guidance_URL, Understand_Data_URL } from '../config/env';
+import { BASE_URL, MAP_URL, Accesibility_URL, Private_Policy_URL, Guidance_URL, Understand_Data_URL, Release_Notes_URL } from '../config/env';
 import { PopupHelper } from '../helpers/popUpHelper';
 
 export class HomePage {
@@ -87,11 +87,11 @@ export class HomePage {
 
     async clickReleaseNotesLink() {
         await this.releaseNotesLink.click();
+        await expect(this.page).toHaveURL(Release_Notes_URL);
     }
 
     async validateReleaseNotesHeading() {
         await expect(this.releaseNotesHeading).toBeVisible();
-        await expect(this.page).toHaveURL(Release_Notes_URL);
     }
 
     async titlesVisible() {

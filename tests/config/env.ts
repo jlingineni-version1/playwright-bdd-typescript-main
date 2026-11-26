@@ -1,6 +1,6 @@
 type Env = 'dev' | 'test' | 'prod';
 
-const ENV_CONFIG: Record<Env, { Release_Notes_URL: string; BASE_URL: string;APP_URL: string;FULLPAGE_URL:string;MAP_URL:string,Accesibility_URL:string,Private_Policy_URL:string,Guidance_URL:string,Understand_Data_URL:string}> = {
+const ENV_CONFIG: Record<Env, { BASE_URL: string;APP_URL: string;FULLPAGE_URL:string;MAP_URL:string,Accesibility_URL:string,Release_Notes_URL: string,Private_Policy_URL:string,Guidance_URL:string,Understand_Data_URL:string}> = {
   dev: {
     BASE_URL: 'https://connectivity-tool-lite-dev.dft.gov.uk',
     APP_URL: 'https://connectivity-tool-lite-dev.dft.gov.uk/app',
@@ -47,6 +47,7 @@ export const MAP_URL=ENV_CONFIG[env].MAP_URL;
 export const Accesibility_URL=ENV_CONFIG[env].Accesibility_URL;
 export const Private_Policy_URL=ENV_CONFIG[env].Private_Policy_URL;
 export const Guidance_URL=ENV_CONFIG[env].Guidance_URL;
+export const Release_Notes_URL=ENV_CONFIG[env].Release_Notes_URL;
 export const Understand_Data_URL=ENV_CONFIG[env].Understand_Data_URL;
 
 // (Optional) export env name

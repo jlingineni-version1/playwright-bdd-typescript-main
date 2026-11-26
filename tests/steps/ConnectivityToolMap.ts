@@ -169,8 +169,10 @@ Then('I capture a canvas screenshot of the map with the {string} percentage appl
   await VisualSnapshotHelper.compareCanvasScreenshot(screenshot, location + opacity + '-canvas-connectivity.png');
 });
 
-Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage }, location: string, expectedScore: string) => {
+Then('I should see the connectivity score displayed correctly on the map for {string} as {string}', async ({ connectivityToolPage,page }, location: string, expectedScore: string) => {
   await connectivityToolPage.verifyConnectivityScorefordifferentlocations(expectedScore);
+  const screenshot = await VisualSnapshotHelper.takeScreenshot(page);
+  await VisualSnapshotHelper.compareScreenshot(screenshot, location + '-connectivity-tool-map.png');
 });
 
 Then('I should see the connectivity score displayed correctly on the map', async ({ connectivityToolPage }) => {
