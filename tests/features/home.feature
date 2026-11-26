@@ -31,18 +31,18 @@ Feature: Home Page Login Functionality
   @home @regression
   Scenario:Home page Applying connectivity tool link check
     When I click on applying connectivity tool link and validate the applying connectivity tool page is displayed successfully
-    Then navigate back to home page 
+    Then navigate back to home page
 
   @home @regression
   Scenario:Home page Interpreting connectivity scores link check
     When I click on interpreting connectivity scores link and validate the interpreting connectivity scores page is displayed successfully
-    Then navigate back to home page 
-  
+    Then navigate back to home page
+
   @home @regression
   Scenario:Home page Find out more link check
     When I click on find out more link and validate the find out more page is displayed successfully
-    Then navigate back to home page 
-  
+    Then navigate back to home page
+
   @home @regression
   Scenario:Home page Transport connectivity metrics link check
     When I click on transport connectivity metrics link and validate the transport connectivity metrics page is displayed successfully
@@ -71,6 +71,11 @@ Feature: Home Page Login Functionality
   @footer @regression
   Scenario:Home page understand the data link check
     When I click on understand the data link and validate the understand the data page is displayed successfully
+    Then navigate back to home page
+
+  @footer @releasenotes @regression
+  Scenario:Home page release notes link check
+    When I click on release notes link and validate the release notes page is displayed successfully
     Then navigate back to home page
 
 # @feedbacKLink @regression

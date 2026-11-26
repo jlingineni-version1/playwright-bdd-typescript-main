@@ -126,9 +126,9 @@ Feature: Connectivity Tool Map Navigation
     When I click on Open Street Map Contributors link on the connectivity tool map page
     Then I should be redirected to Open Street Map Contributors screen and navigate back to connectivity tool map page
 
-  @footer @releasenotes @regression
-  Scenario:Home page release notes link check
-    When I click on release notes link and validate the release notes page is displayed successfully
-    Then navigate back to home page
+  # @footer @releasenotes @regression
+  # Scenario:Home page release notes link check
+  #   When I click on release notes link and validate the release notes page is displayed successfully
+  #   Then navigate back to home page
 
 
